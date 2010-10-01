@@ -138,17 +138,22 @@
               <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
               <Bundle-Description>${project.description}</Bundle-Description>
               <Import-Package>
+javax.crypto, javax.crypto.spec,              
+com.ning.http.client,
 org.codehaus.jackson,
 org.codehaus.jackson.annotate,
-org.codehaus.jackson.mapper
+org.codehaus.jackson.map,
+org.codehaus.jackson.map.deser,
+org.codehaus.jackson.map.type,
+org.codehaus.jackson.type,
+org.joda.time
 </Import-Package>
               <DynamicImport-Package>
 </DynamicImport-Package>
               <Private-Package>
-com.sun.msv.util
 </Private-Package>
               <Export-Package>
-com.ning.ext,
+com.ning.api.client*
 </Export-Package>
             </instructions>
           </configuration>
