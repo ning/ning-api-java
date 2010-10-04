@@ -2,22 +2,15 @@ package com.ning.api.client.sample;
 
 import java.util.List;
 
-import com.ning.api.client.NingClient;
 import com.ning.api.client.access.Activities;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.PagedList;
-import com.ning.api.client.auth.AuthEntry;
 import com.ning.api.client.item.*;
 
-public class ManualIterateActivities
+public class ManualIterateActivities extends SampleIntermediate
 {
-    public static void main(String[] args) throws Exception
+    public void doAction(NingConnection conn) throws Exception
     {
-        NingClient client = new NingClient("tatutest",
-                new AuthEntry("58ae0fea-ae25-4c3b-b868-ac5591396a9e", "85885843-6153-465e-88b5-a1d4f4146d6e"),
-                "localhost", 9090, 8443);
-        AuthEntry userToken = new AuthEntry("878ace49-f324-403b-85c9-3d78117147e1", "12913470-6dee-4944-8bbc-661401fca07a");
-        NingConnection conn = client.connect(userToken);
         Activities a = conn.activities();
         int entry = 0;
         
@@ -42,4 +35,7 @@ public class ManualIterateActivities
         return "activity of type "+act.getType()+", title '"+act.getTitle()+"', author: "+act.getAuthor();
     }
 
+    public static void main(String[] args) throws Exception {
+        new ManualIterateActivities().action();
+    }
 }

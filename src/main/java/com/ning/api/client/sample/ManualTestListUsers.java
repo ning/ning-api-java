@@ -4,30 +4,17 @@ import java.util.*;
 
 import org.joda.time.DateTime;
 
-import com.ning.api.client.NingClient;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.access.Users;
 import com.ning.api.client.action.PagedList;
-import com.ning.api.client.auth.AuthEntry;
 import com.ning.api.client.item.Fields;
 import com.ning.api.client.item.User;
 import com.ning.api.client.item.UserField;
 
-public class ManualTestListUsers
+public class ManualTestListUsers extends SampleIntermediate
 {
-    public static void main(String[] args) throws Exception
+    public void doAction(NingConnection conn) throws Exception
     {
-        System.out.println("About to construct client, list all users of 'tatutest'");
-        NingClient client = new NingClient("tatutest",
-                new AuthEntry("58ae0fea-ae25-4c3b-b868-ac5591396a9e", "85885843-6153-465e-88b5-a1d4f4146d6e"),
-                "localhost", 9090, 8443);
-        // here's one pre-constructed token:
-        AuthEntry userToken = new AuthEntry("878ace49-f324-403b-85c9-3d78117147e1", "12913470-6dee-4944-8bbc-661401fca07a");
-        // and other, if we want to vary them
-        //AuthEntry userToken = new AuthEntry("a7729d6b-06d2-4c77-90b1-e0deea57030e", "50f05a36-0ef3-45df-ab05-11b340aefa29");
-
-        NingConnection conn = client.connect(userToken);
-
         // First, check users created since 7 days ago
         DateTime since = new DateTime();
         since = since.minusDays(6);
@@ -62,5 +49,9 @@ public class ManualTestListUsers
             }
         }
         System.out.println("Done!");
+    }
+
+    public static void main(String[] args) throws Exception {
+        new ManualTestListUsers().action();
     }
 }
