@@ -1,4 +1,4 @@
-package com.ning.api.client.sample;
+package com.ning.api.client;
 
 /**
  * Base class for all exceptions Ning Client throws. Unchecked for convenience;

@@ -1,4 +1,4 @@
-package com.ning.api.client.sample;
+package com.ning.api.client;
 
 import java.io.IOException;
 
