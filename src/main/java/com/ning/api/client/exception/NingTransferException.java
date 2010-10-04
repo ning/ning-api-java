@@ -2,7 +2,7 @@ package com.ning.api.client.exception;
 
 import java.io.IOException;
 
-import com.ning.api.client.sample.NingClientException;
+import com.ning.api.client.NingClientException;
 
 /**
  * Exception used when exception was thrown due to a caught {@link IOException},

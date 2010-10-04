@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.Finder;
 import com.ning.api.client.http.NingHttpGet;
@@ -11,7 +12,6 @@ import com.ning.api.client.item.ContentItem;
 import com.ning.api.client.item.Fields;
 import com.ning.api.client.item.Key;
 import com.ning.api.client.item.Typed;
-import com.ning.api.client.sample.NingClientException;
 
 /**
  * Standard implementation for typical Finders.

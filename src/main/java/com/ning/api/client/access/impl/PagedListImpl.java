@@ -2,6 +2,7 @@ package com.ning.api.client.access.impl;
 
 import java.util.*;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.Anchor;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.PagedList;
@@ -10,7 +11,6 @@ import com.ning.api.client.http.NingHttpRequest.Param;
 import com.ning.api.client.item.ContentItem;
 import com.ning.api.client.item.Fields;
 import com.ning.api.client.item.Typed;
-import com.ning.api.client.sample.NingClientException;
 
 public class PagedListImpl <C extends ContentItem<F, C>,
     F extends Enum<F> & Typed>

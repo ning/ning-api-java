@@ -2,7 +2,7 @@ package com.ning.api.client.http;
 
 import java.io.IOException;
 
-import com.ning.api.client.sample.NingClientException;
+import com.ning.api.client.NingClientException;
 
 public class NingHttpException extends NingClientException
 {

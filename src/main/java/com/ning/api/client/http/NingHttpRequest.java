@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.ning.http.client.Response;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.auth.Base64Codec;
 import com.ning.api.client.auth.UTF8Codec;
 import com.ning.api.client.auth.UTF8UrlCodec;
@@ -19,7 +20,6 @@ import com.ning.api.client.exception.NingProcessingException;
 import com.ning.api.client.exception.NingTimeoutException;
 import com.ning.api.client.exception.NingTransferException;
 import com.ning.api.client.json.ExtendedObjectMapper;
-import com.ning.api.client.sample.NingClientException;
 
 public class NingHttpRequest<T extends NingHttpRequest<T>>
 {

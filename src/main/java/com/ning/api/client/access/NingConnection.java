@@ -46,6 +46,7 @@ public class NingConnection
     private final Networks networks;
     private final Photos photos;
     private final Users users;
+    private final Videos videos;
     
     public NingConnection(ObjectMapper objectMapper,
             AuthEntry consumerAuth, AuthEntry userAuth,
@@ -67,6 +68,7 @@ public class NingConnection
         networks = new Networks(this);
         photos = new Photos(this);
         users = new Users(this);
+        videos = new Videos(this);
     }
 
     /*
@@ -82,6 +84,7 @@ public class NingConnection
     public Networks networks() { return networks; }
     public Photos photos() { return photos; }
     public Users users() { return users; }
+    public Videos videos() { return videos; }
     
     /*
     ///////////////////////////////////////////////////////////////////////

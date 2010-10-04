@@ -2,6 +2,7 @@ package com.ning.api.client.sample;
 
 import org.joda.time.DateTime;
 
+import com.ning.api.client.NingClient;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.auth.AuthEntry;
 import com.ning.api.client.item.*;

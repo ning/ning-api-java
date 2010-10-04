@@ -2,6 +2,7 @@ package com.ning.api.client.sample;
 
 import java.util.*;
 
+import com.ning.api.client.NingClient;
 import com.ning.api.client.access.*;
 import com.ning.api.client.auth.AuthEntry;
 import com.ning.api.client.item.*;

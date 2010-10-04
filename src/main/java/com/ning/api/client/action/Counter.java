@@ -1,6 +1,6 @@
 package com.ning.api.client.action;
 
-import com.ning.api.client.sample.NingClientException;
+import com.ning.api.client.NingClientException;
 
 /**
  * Simple common API for all types of counter objects; does not

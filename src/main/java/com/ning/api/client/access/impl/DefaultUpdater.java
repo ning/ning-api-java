@@ -1,11 +1,11 @@
 package com.ning.api.client.access.impl;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.Updater;
 import com.ning.api.client.http.NingHttpPut;
 import com.ning.api.client.http.NingHttpResponse;
 import com.ning.api.client.item.ContentItem;
-import com.ning.api.client.sample.NingClientException;
 
 public abstract class DefaultUpdater <C extends ContentItem<?,C>> implements Updater<C>
 {

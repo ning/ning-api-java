@@ -2,11 +2,11 @@ package com.ning.api.client.access.impl;
 
 import org.joda.time.ReadableDateTime;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.Counter;
 import com.ning.api.client.exception.NingTransformException;
 import com.ning.api.client.http.NingHttpGet;
-import com.ning.api.client.sample.NingClientException;
 
 /**
  * Standard implementation for typical Finders.

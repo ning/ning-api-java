@@ -2,7 +2,7 @@ package com.ning.api.client.exception;
 
 import java.util.concurrent.TimeoutException;
 
-import com.ning.api.client.sample.NingClientException;
+import com.ning.api.client.NingClientException;
 
 public class NingTimeoutException extends NingClientException
 {

@@ -2,6 +2,7 @@ package com.ning.api.client.sample;
 
 import java.util.List;
 
+import com.ning.api.client.NingClient;
 import com.ning.api.client.access.Activities;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.PagedList;

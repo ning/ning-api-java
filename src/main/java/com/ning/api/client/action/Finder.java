@@ -3,9 +3,9 @@ package com.ning.api.client.action;
 import java.util.Collection;
 import java.util.List;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.item.ContentItem;
 import com.ning.api.client.item.Key;
-import com.ning.api.client.sample.NingClientException;
 
 /**
  * Simple common API for all types of counter objects; does not

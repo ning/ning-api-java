@@ -1,7 +1,7 @@
 package com.ning.api.client.action;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.item.ContentItem;
-import com.ning.api.client.sample.NingClientException;
 
 public interface Updater<C extends ContentItem<?,C>>
 {

@@ -1,6 +1,6 @@
 package com.ning.api.client.exception;
 
-import com.ning.api.client.sample.NingClientException;
+import com.ning.api.client.NingClientException;
 
 /**
  * Exception used to contain miscellaneous unclassified exception

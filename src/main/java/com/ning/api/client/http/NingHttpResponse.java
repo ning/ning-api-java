@@ -11,6 +11,7 @@ import org.codehaus.jackson.type.JavaType;
 
 import com.ning.http.client.Response;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.impl.AnchorHolder;
 import com.ning.api.client.exception.NingTransferException;
 import com.ning.api.client.exception.NingTransformException;
@@ -18,7 +19,6 @@ import com.ning.api.client.item.ContentItem;
 import com.ning.api.client.json.ItemCountResponse;
 import com.ning.api.client.json.ItemResponse;
 import com.ning.api.client.json.ItemSequenceResponse;
-import com.ning.api.client.sample.NingClientException;
 
 /**
  * Wrapper around "raw" HTTP response object; adds convenience accesors

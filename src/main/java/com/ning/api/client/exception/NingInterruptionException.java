@@ -1,6 +1,6 @@
 package com.ning.api.client.exception;
 
-import com.ning.api.client.sample.NingClientException;
+import com.ning.api.client.NingClientException;
 
 public class NingInterruptionException extends NingClientException
 {

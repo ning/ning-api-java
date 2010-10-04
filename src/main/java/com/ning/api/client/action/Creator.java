@@ -1,7 +1,7 @@
 package com.ning.api.client.action;
 
+import com.ning.api.client.NingClientException;
 import com.ning.api.client.item.ContentItem;
-import com.ning.api.client.sample.NingClientException;
 
 /**
  * Common parts of API for type-specific creators.
