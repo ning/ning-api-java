@@ -18,7 +18,7 @@ public class ManualTestToken
         NingClient client = new NingClient("tatutest",
                 new AuthEntry("58ae0fea-ae25-4c3b-b868-ac5591396a9e", "85885843-6153-465e-88b5-a1d4f4146d6e"),
                 "localhost", 9090, 8443);
-        Token token = client.createToken("ningdev@ning.com", "foo");
+        Token token = client.createToken("user@email", "password");
 
         // for output let's convert back to JSON:
         System.out.println("Call result ("+token.getClass()+") as JSON:");
