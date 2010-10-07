@@ -8,7 +8,10 @@ import com.ning.api.client.auth.AuthEntry;
  */
 public abstract class SampleIntermediate extends SampleBase
 {
-    protected final static String TEST_NETWORK = "www";
+    public final static String DEFAULT_XAPI_HOST = "external.ningapis.com";
+    
+    // 'www' is used for bootstrapping (listing Networks that user owns)
+    protected final static String DEFAULT_NETWORK = "www";
 
     // bogus ones: need to externalize
 
@@ -20,7 +23,12 @@ public abstract class SampleIntermediate extends SampleBase
     
     protected SampleIntermediate()
     {
-        this("external.ningapis.com", 80, 443, TEST_NETWORK);
+        this(DEFAULT_NETWORK);
+    }
+
+    protected SampleIntermediate(String network)
+    {
+        this(DEFAULT_XAPI_HOST, 80, 443, network);
     }
 
     protected SampleIntermediate(String hostname, int httpPort, int httpsPort, String network)

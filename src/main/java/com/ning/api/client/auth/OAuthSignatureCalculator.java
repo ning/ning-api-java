@@ -69,6 +69,21 @@ public class OAuthSignatureCalculator
         StringBuilder signedText = new StringBuilder(100);
         signedText.append(method); // POST / GET etc (nothing to URL encode)
         signedText.append('&');
+
+        /* 07-Oct-2010, tatu: URL may contain default port number; if so, need to extract for
+         *  calculation...
+         */
+        if (baseURL.startsWith("http:")) {
+            int i = baseURL.indexOf(":80/", 4);
+            if (i > 0) {
+                baseURL = baseURL.substring(0, i) + baseURL.substring(i+3);
+            }                
+        } else if (baseURL.startsWith("https:")) {
+            int i = baseURL.indexOf(":443/", 5);
+            if (i > 0) {
+                baseURL = baseURL.substring(0, i) + baseURL.substring(i+4);
+            }                
+        }
         signedText.append(urlEncoder.encode(baseURL));
 
         /**
