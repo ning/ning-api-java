@@ -8,19 +8,6 @@ import com.ning.api.client.auth.AuthEntry;
  */
 public abstract class SampleIntermediate extends SampleBase
 {
-    public final static String DEFAULT_XAPI_HOST = "external.ningapis.com";
-    
-    // 'www' is used for bootstrapping (listing Networks that user owns)
-    protected final static String DEFAULT_NETWORK = "www";
-
-    // bogus ones: need to externalize
-
-    protected final static String TEST_CONSUMER_KEY = "11111111-1111-1111-1111-111111111111";
-    protected final static String TEST_CONSUMER_SECRET = "11111111-1111-1111-1111-111111111111";
-
-    protected final static String TEST_USER_KEY = "11111111-1111-1111-1111-111111111111";
-    protected final static String TEST_USER_TOKEN = "11111111-1111-1111-1111-111111111111";
-    
     protected SampleIntermediate()
     {
         this(DEFAULT_NETWORK);
