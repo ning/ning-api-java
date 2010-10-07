@@ -8,19 +8,26 @@ import com.ning.api.client.auth.AuthEntry;
  */
 public abstract class SampleIntermediate extends SampleBase
 {
-    protected final static String TEST_NETWORK = "tatutest";
+    protected final static String TEST_NETWORK = "www";
 
-    protected final static String TEST_CONSUMER_KEY = "58ae0fea-ae25-4c3b-b868-ac5591396a9e";
-    protected final static String TEST_CONSUMER_SECRET = "85885843-6153-465e-88b5-a1d4f4146d6e";
+    // bogus ones: need to externalize
 
-    protected final static String TEST_USER_KEY = "878ace49-f324-403b-85c9-3d78117147e1";
-    protected final static String TEST_USER_TOKEN = "12913470-6dee-4944-8bbc-661401fca07a";
+    protected final static String TEST_CONSUMER_KEY = "11111111-1111-1111-1111-111111111111";
+    protected final static String TEST_CONSUMER_SECRET = "11111111-1111-1111-1111-111111111111";
+
+    protected final static String TEST_USER_KEY = "11111111-1111-1111-1111-111111111111";
+    protected final static String TEST_USER_TOKEN = "11111111-1111-1111-1111-111111111111";
     
     protected SampleIntermediate()
     {
-      super("localhost", 9090, 8443, TEST_NETWORK);
+        this("external.ningapis.com", 80, 443, TEST_NETWORK);
     }
 
+    protected SampleIntermediate(String hostname, int httpPort, int httpsPort, String network)
+    {
+      super(hostname, httpPort, httpsPort, network);
+    }
+    
     protected AuthEntry getConsumerKey() {
         return new AuthEntry(TEST_CONSUMER_KEY, TEST_CONSUMER_SECRET);
     }
