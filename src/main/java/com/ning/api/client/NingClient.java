@@ -114,12 +114,7 @@ public class NingClient
         // and then authorization as "application/x-www-form-urlencoded"
         post = post.addFormParameter("oauth_signature_method","PLAINTEXT")
             .addFormParameter("oauth_consumer_key", consumerAuth.getKey())
-            /* 25-Aug-2010, tatu: not quite sure why and how quoting is expected
-             *    this early for trailing ampersand... but that's how the
-             *    cookie crumbles ("it ain't working... that's how you do it!")
-             */
-//            .addFormParameter("oauth_signature", consumerAuth.getToken()+"&")
-            .addFormParameter("oauth_signature", consumerAuth.getToken()+"%26")
+            .addFormParameter("oauth_signature", consumerAuth.getToken()+"&")
             ;
         
         // And then make the call
