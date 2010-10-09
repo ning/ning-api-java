@@ -52,7 +52,7 @@ public class OAuthSignatureCalculator
     @Override
     public void calculateAndAddSignature(String baseURL, Request request, RequestBuilderBase<?> requestBuilder)
     {
-        String method = request.getType().toString(); // POST etc
+        String method = request.getReqType().toString(); // POST etc
         String nonce = generateNonce();
         long timestamp = System.currentTimeMillis() / 1000L;
         String signature = calculateSignature(method, baseURL, timestamp, nonce, request.getParams(), request.getQueryParams());
