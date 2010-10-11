@@ -7,7 +7,7 @@ import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.PagedList;
 import com.ning.api.client.item.*;
 
-public class ManualterateRecentBlogs extends SampleIntermediate
+public class ManualIterateRecentBlogs extends SampleIntermediate
 {
     public void doAction(NingConnection conn) throws Exception
     {
@@ -56,6 +56,6 @@ public class ManualterateRecentBlogs extends SampleIntermediate
     }
 
     public static void main(String[] args) throws Exception {
-        new ManualterateRecentBlogs().action();
+        new ManualIterateRecentBlogs().action();
     }
 }
