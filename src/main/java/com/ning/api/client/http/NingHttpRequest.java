@@ -10,9 +10,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.ning.http.client.Response;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
+import com.ning.http.util.Base64;
 
 import com.ning.api.client.NingClientException;
-import com.ning.api.client.auth.Base64Codec;
 import com.ning.api.client.auth.UTF8Codec;
 import com.ning.api.client.auth.UTF8UrlCodec;
 import com.ning.api.client.exception.NingInterruptionException;
@@ -52,7 +52,6 @@ public class NingHttpRequest<T extends NingHttpRequest<T>>
     
     private final static UTF8Codec utf8Codec = new UTF8Codec();
     private final static UTF8UrlCodec urlEncoder = new UTF8UrlCodec();
-    private final static Base64Codec base64Codec = new Base64Codec(objectMapper);
 
     protected BoundRequestBuilder requestBuilder;
     
@@ -165,7 +164,7 @@ public class NingHttpRequest<T extends NingHttpRequest<T>>
     public T addBasicAuth(String userName, String password)
     {
         String key = userName + ":" + password;
-        String authAsBase64 = "Basic "+base64Codec.toBase64(utf8Codec.toUTF8(key));
+        String authAsBase64 = "Basic "+Base64.encode(utf8Codec.toUTF8(key));
         return addHeader(HEADER_AUTHORIZATION, authAsBase64);
     }
 

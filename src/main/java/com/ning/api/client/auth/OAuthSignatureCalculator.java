@@ -6,6 +6,7 @@ import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilderBase;
 import com.ning.http.client.SignatureCalculator;
+import com.ning.http.util.Base64;
 
 public class OAuthSignatureCalculator
     implements SignatureCalculator
@@ -25,7 +26,6 @@ public class OAuthSignatureCalculator
 
     protected final static UTF8Codec utf8Codec = new UTF8Codec();
     protected final static UTF8UrlCodec urlEncoder = new UTF8UrlCodec();
-    protected final static Base64Codec base64Codec = new Base64Codec();
     
     /**
      * To generate Nonce, need some (pseudo)randomness; no need for
@@ -125,7 +125,7 @@ public class OAuthSignatureCalculator
         byte[] rawBase = utf8Codec.toUTF8(signedText.toString());
         byte[] rawSignature = mac.digest(rawBase);
         // and finally, base64 encoded... phew!
-        return base64Codec.toBase64(rawSignature);
+        return Base64.encode(rawSignature);
     }
 
     /**
@@ -157,7 +157,7 @@ public class OAuthSignatureCalculator
     {
         random.nextBytes(nonceBuffer);
         // let's use base64 encoding over hex, slightly more compact
-        return base64Codec.toBase64(nonceBuffer);
+        return Base64.encode(nonceBuffer);
 //      return String.valueOf(Math.abs(random.nextLong()));
     }
 
