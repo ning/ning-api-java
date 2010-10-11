@@ -15,6 +15,12 @@ import com.ning.api.client.item.Token;
 
 public class NingClient
 {
+    /*
+    /////////////////////////////////////////////////////////////////////////
+    // Constants
+    /////////////////////////////////////////////////////////////////////////
+     */
+
     /**
      * If not explicitly specified, we will default to using port 8080,
      * which is 
@@ -28,34 +34,51 @@ public class NingClient
     public final String API_PATH_PREFIX = "/xn/rest/";
 
     public final String API_VERSION = "/1.0/";
+    
+    /*
+    /////////////////////////////////////////////////////////////////////////
+    // Configuration
+    /////////////////////////////////////////////////////////////////////////
+     */
 
-    // For now we'll use 8 second timeout (5 was too low!)
-    public final int DEFAULT_TIMEOUT_MSECS = 8000;
-
+    protected NingClientConfig config = NingClientConfig.defaults();
+    
     /**
      * Network identifier of Ning network to connect to.
      */
-    private final String networkId;
+    protected final String networkId;
 
     /**
      * Consumer authorization credentials that Ning has created for
      * the network in question
      */
-    private final AuthEntry consumerAuth;
+    protected final AuthEntry consumerAuth;
 
     /**
      * URL prefix for external API request when using non-secure endpoint.
      */
-    private final String xapiPrefixRegular;
+    protected final String xapiPrefixRegular;
 
     /**
      * URL prefix for external API request when using secure endpoint.
      */
-    private final String xapiPrefixSecure;
+    protected final String xapiPrefixSecure;
 
+    /*
+    /////////////////////////////////////////////////////////////////////////
+    // Helper objects
+    /////////////////////////////////////////////////////////////////////////
+     */
+    
     private final ObjectMapper objectMapper;
 
     private final NingHttpClient httpClient;
+
+    /*
+    /////////////////////////////////////////////////////////////////////////
+    // Construction
+    /////////////////////////////////////////////////////////////////////////
+     */
     
     public NingClient(String networkId, AuthEntry consumerAuth)
     {
@@ -95,7 +118,26 @@ public class NingClient
 
     /*
     /////////////////////////////////////////////////////////////////////////
-    // Public API
+    // Public API, configuration
+    /////////////////////////////////////////////////////////////////////////
+     */
+
+    public NingClientConfig getConfig() { return config; }
+
+    /**
+     * Method for overriding configuration of this client instance with
+     * specified overrides. Resulting configuration will be used as the
+     * default configuration for connections created by this client (as well
+     * as for operations it directly does).
+     */
+    public void overrideConfig(NingClientConfig configOverrides) {
+        // note: we will merge settings, to ensure there are defaults of some kind
+        this.config = config.overrideWith(configOverrides);
+    }
+    
+    /*
+    /////////////////////////////////////////////////////////////////////////
+    // Public API, token creation
     /////////////////////////////////////////////////////////////////////////
      */
     
@@ -118,7 +160,7 @@ public class NingClient
             ;
         
         // And then make the call
-        NingHttpResponse resp = post.execute(DEFAULT_TIMEOUT_MSECS);
+        NingHttpResponse resp = post.execute(config.getReadTimeoutMsecs());
 
         int code = resp.getStatusCode();
         if (code != 200) {
@@ -141,10 +183,31 @@ public class NingClient
         return tokenResp;
     }
 
+    /*
+    /////////////////////////////////////////////////////////////////////////
+    // Public API, creating connection to access resources
+    /////////////////////////////////////////////////////////////////////////
+     */
+    
+    /**
+     * Method for creating {@link NingConnection} to access resources using
+     * specified User token, and default configuration settings.
+     */
     public NingConnection connect(AuthEntry userAuth)
     {
-        return new NingConnection(objectMapper, consumerAuth, userAuth, httpClient,
-                xapiPrefixRegular, xapiPrefixSecure, DEFAULT_TIMEOUT_MSECS);
+        return connect(userAuth, null);
+    }
+
+    /**
+     * Method for creating {@link NingConnection} to access resources using
+     * specified User token, and specified configuration overrides (above
+     * and beyond default client configuration settings)
+     */
+    public NingConnection connect(AuthEntry userAuth, NingClientConfig config)
+    {
+        NingClientConfig connectionConfig = config.overrideWith(config);
+        return new NingConnection(connectionConfig, objectMapper, consumerAuth, userAuth, httpClient,
+                xapiPrefixRegular, xapiPrefixSecure);
 
     }
 }

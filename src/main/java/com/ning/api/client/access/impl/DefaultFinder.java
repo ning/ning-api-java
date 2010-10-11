@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.Finder;
@@ -32,7 +33,7 @@ public class DefaultFinder<
     /**
      * Timeout to use for calls
      */
-    protected final long timeoutMsecs;
+    protected NingClientConfig config;
 
     /**
      * Request end point used for fetching items
@@ -46,11 +47,11 @@ public class DefaultFinder<
 
     protected final Class<C> itemType;
     
-    public DefaultFinder(NingConnection connection, long timeoutMsecs, String endpoint,
+    public DefaultFinder(NingConnection connection, NingClientConfig config, String endpoint,
             Class<C> itemType, Fields<F> fields)
     {
         this.connection = connection;
-        this.timeoutMsecs = timeoutMsecs;
+        this.config = config;
         this.endpoint = endpoint;
         this.fields = fields;
         this.itemType = itemType;
@@ -88,7 +89,7 @@ public class DefaultFinder<
     public C find(Key<C> id)
     {
         NingHttpGet getter = buildQuery(id);
-        return getter.execute(timeoutMsecs).asSingleItem(itemType);
+        return getter.execute(config.getReadTimeoutMsecs()).asSingleItem(itemType);
     }
 
     public List<C> find(Key<C>[] ids) {

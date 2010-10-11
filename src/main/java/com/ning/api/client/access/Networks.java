@@ -1,5 +1,6 @@
 package com.ning.api.client.access;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.impl.DefaultLister;
 import com.ning.api.client.access.impl.PagedListImpl;
 import com.ning.api.client.action.PagedList;
@@ -12,9 +13,9 @@ import com.ning.api.client.item.*;
  */
 public class Networks  extends Items<Network, NetworkField>
 {
-    public Networks(NingConnection connection)
+    public Networks(NingConnection connection, NingClientConfig config)
     {
-        super(connection, "Network", Network.class, NetworkField.class);
+        super(connection, config, "Network", Network.class, NetworkField.class);
     }
 
     /*
@@ -28,7 +29,7 @@ public class Networks  extends Items<Network, NetworkField>
     }
     
     public Lister listerForAlpha(Fields<NetworkField> fields) {
-        return new Lister(connection, defaultTimeoutForReadsMsecs, endpointForAlpha(), fields);
+        return new Lister(connection, config, endpointForAlpha(), fields);
     }
     
     /*
@@ -39,15 +40,15 @@ public class Networks  extends Items<Network, NetworkField>
 
     public static class Lister extends DefaultLister<Network, NetworkField>
     {
-        protected Lister(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected Lister(NingConnection connection, NingClientConfig config, String endpoint,
                 Fields<NetworkField> fields)
         {
-            super(connection, timeoutMsecs, endpoint, fields, null, null, null);
+            super(connection, config, endpoint, fields, null, null, null);
         }
 
         @Override
         public PagedList<Network> list() {
-            return new PagedListImpl<Network,NetworkField>(connection, timeoutMsecs, endpoint,
+            return new PagedListImpl<Network,NetworkField>(connection, config, endpoint,
                     Network.class, fields, null, null, null);
         }
     }    

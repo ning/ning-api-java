@@ -1,5 +1,6 @@
 package com.ning.api.client.access.impl;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.Deleter;
 import com.ning.api.client.http.NingHttpDelete;
@@ -13,11 +14,8 @@ public class DefaultDeleter<C extends ContentItem<?,C>>
 {
     protected final NingConnection connection;
 
-    /**
-     * Timeout to use for calls
-     */
-    protected final long timeoutMsecs;
-
+    protected NingClientConfig config;
+    
     /**
      * Request end point used for fetching items
      */
@@ -25,17 +23,17 @@ public class DefaultDeleter<C extends ContentItem<?,C>>
 
     protected final Key<C> id;
 
-    public DefaultDeleter(NingConnection connection, long timeoutMsecs, String endpoint,
+    public DefaultDeleter(NingConnection connection, NingClientConfig config, String endpoint,
             String id)
     {
-        this(connection, timeoutMsecs, endpoint, new Key<C>(id));
+        this(connection, config, endpoint, new Key<C>(id));
     }
     
-    public DefaultDeleter(NingConnection connection, long timeoutMsecs, String endpoint,
+    public DefaultDeleter(NingConnection connection, NingClientConfig config, String endpoint,
             Key<C> id)
     {
         this.connection = connection;
-        this.timeoutMsecs = timeoutMsecs;
+        this.config = config;
         this.endpoint = endpoint;
         this.id = id;
     }
@@ -44,7 +42,7 @@ public class DefaultDeleter<C extends ContentItem<?,C>>
     {
         NingHttpDelete deleter = buildRequest(id);
         // should we wait big longer for successful modification?
-        NingHttpResponse  response = deleter.execute(timeoutMsecs);
+        NingHttpResponse  response = deleter.execute(config.getWriteTimeoutMsecs());
         response.verifyResponse();
     }
 

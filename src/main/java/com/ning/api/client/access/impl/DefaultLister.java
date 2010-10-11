@@ -2,6 +2,7 @@ package com.ning.api.client.access.impl;
 
 import java.util.*;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.access.impl.ItemIteratorImpl;
 import com.ning.api.client.action.PagedList;
@@ -24,7 +25,7 @@ public abstract class DefaultLister<
     /**
      * Timeout to use for calls
      */
-    protected final long timeoutMsecs;
+    protected final NingClientConfig config;
 
     /**
      * Request end point used for fetching items
@@ -46,12 +47,12 @@ public abstract class DefaultLister<
 
     protected final Boolean isApproved;
 
-    protected DefaultLister(NingConnection connection, long timeoutMsecs, String endpoint,
+    protected DefaultLister(NingConnection connection, NingClientConfig config, String endpoint,
             Fields<F> fields,
             String author, Boolean isPrivate, Boolean isApproved)
     {
         this.connection = connection;
-        this.timeoutMsecs = timeoutMsecs;
+        this.config = config;
         this.endpoint = endpoint;
         this.fields = fields;
         this.author = author;

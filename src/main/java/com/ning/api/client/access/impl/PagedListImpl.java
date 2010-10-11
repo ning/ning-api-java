@@ -2,6 +2,7 @@ package com.ning.api.client.access.impl;
 
 import java.util.*;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.Anchor;
 import com.ning.api.client.access.NingConnection;
@@ -22,9 +23,9 @@ public class PagedListImpl <C extends ContentItem<F, C>,
     protected final NingConnection connection;
 
     /**
-     * Timeout to use for calls
+     * Configuration to use for making calls
      */
-    protected final long timeoutMsecs;
+    protected NingClientConfig config;
     
     /**
      * Endpoint to call; includes information about content type as well as
@@ -50,13 +51,13 @@ public class PagedListImpl <C extends ContentItem<F, C>,
      */
     protected final AnchorHolder anchor;
     
-    public PagedListImpl(NingConnection connection, long timeoutMsecs, String endpoint,
+    public PagedListImpl(NingConnection connection, NingClientConfig config, String endpoint,
             Class<C> itemClass,  Fields<F> fields,
             String author, Boolean isPrivate, Boolean isApproved,
             Param... additionalQueryParams)
     {
         this.connection = connection;
-        this.timeoutMsecs = timeoutMsecs;
+        this.config = config;
         this.endpoint = endpoint;
         
         this.itemClass = itemClass;
@@ -101,7 +102,7 @@ public class PagedListImpl <C extends ContentItem<F, C>,
         if (additionalQueryParams != null) {
             getter = getter.addQueryParameters(additionalQueryParams);
         }
-        return getter.execute(timeoutMsecs).asItemList(itemClass, anchor);
+        return getter.execute(config.getReadTimeoutMsecs()).asItemList(itemClass, anchor);
     }
 
     public Anchor position() {

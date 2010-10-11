@@ -2,6 +2,7 @@ package com.ning.api.client.access;
 
 import org.joda.time.ReadableDateTime;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.impl.DefaultCounter;
 import com.ning.api.client.access.impl.DefaultCreator;
 import com.ning.api.client.access.impl.DefaultDeleter;
@@ -18,9 +19,9 @@ import com.ning.api.client.item.*;
 
 public class Photos extends Items<Photo, PhotoField>
 {
-    public Photos(NingConnection connection)
+    public Photos(NingConnection connection, NingClientConfig config)
     {
-        super(connection, "Photo", Photo.class, PhotoField.class);
+        super(connection, config, "Photo", Photo.class, PhotoField.class);
     }
 
     /*
@@ -30,16 +31,16 @@ public class Photos extends Items<Photo, PhotoField>
      */
 
     public Counter counter(ReadableDateTime createdAfter) {
-        return new Counter(connection, defaultTimeoutForReadsMsecs, endpointForCount(),
+        return new Counter(connection, config, endpointForCount(),
                     createdAfter, null, null, null);
     }
 
     public Creator<Photo> creator(Photo photo) {
-        return new PhotoCreator(connection, defaultTimeoutForUpdatesMsecs, endpointForPOST(), photo);
+        return new PhotoCreator(connection, config, endpointForPOST(), photo);
     }
     
     public final Deleter<Photo> deleter(Key<Photo> id) {
-        return new DefaultDeleter<Photo>(connection, defaultTimeoutForUpdatesMsecs, endpointForDELETE(), id);
+        return new DefaultDeleter<Photo>(connection, config, endpointForDELETE(), id);
     }
     
     public Lister listerForRecent(PhotoField firstField, PhotoField... otherFields) {
@@ -47,12 +48,12 @@ public class Photos extends Items<Photo, PhotoField>
     }
 
     public Lister listerForRecent(Fields<PhotoField> fields) {
-        return new Lister(connection, defaultTimeoutForReadsMsecs, endpointForRecent(), fields,
+        return new Lister(connection, config, endpointForRecent(), fields,
                 null, null, null);
     }
 
     public Updater<Photo> updater(Photo photo) {
-        return new PhotoUpdater(connection, defaultTimeoutForUpdatesMsecs, endpointForPUT(), photo);
+        return new PhotoUpdater(connection, config, endpointForPUT(), photo);
     }
     
     /*
@@ -68,14 +69,14 @@ public class Photos extends Items<Photo, PhotoField>
      */
     public class Counter extends DefaultCounter
     {
-        protected Counter(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected Counter(NingConnection connection, NingClientConfig config, String endpoint,
                 ReadableDateTime createdAfter, String author,
                 Boolean isPrivate, Boolean isApproved) {
-            super(connection, timeoutMsecs, endpoint, createdAfter, author, isPrivate, isApproved);
+            super(connection, config, endpoint, createdAfter, author, isPrivate, isApproved);
         }
 
         protected Counter(Counter base, String author, Boolean isPrivate, Boolean isApproved) {
-            this(base.connection, base.timeoutMsecs, base.endpoint, base.createdAfter,
+            this(base.connection, base.config, base.endpoint, base.createdAfter,
                     author, isPrivate, isApproved);
         }
         
@@ -104,10 +105,10 @@ public class Photos extends Items<Photo, PhotoField>
     {
         protected Photo photo;
         
-        public PhotoCreator(NingConnection connection, long timeoutMsecs, String endpoint,
+        public PhotoCreator(NingConnection connection, NingClientConfig config, String endpoint,
                 Photo Photo)
         {
-            super(connection, timeoutMsecs, endpoint);
+            super(connection, config, endpoint);
             this.photo = photo.clone();
         }
 
@@ -141,40 +142,40 @@ public class Photos extends Items<Photo, PhotoField>
      */
     public static class Lister extends DefaultLister<Photo, PhotoField>
     {
-        protected Lister(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected Lister(NingConnection connection, NingClientConfig config, String endpoint,
                 Fields<PhotoField> fields,String author, Boolean isPrivate, Boolean isApproved)
         {
-            super(connection, timeoutMsecs, endpoint, fields, author, isPrivate, isApproved);
+            super(connection, config, endpoint, fields, author, isPrivate, isApproved);
         }
 
         public Lister author(String author) {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, isApproved);
         }
 
         public Lister approved() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, Boolean.TRUE);
         }
 
         public Lister unapproved() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, Boolean.FALSE);
         }
         
         public Lister onlyPrivate() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, Boolean.TRUE, isApproved);
         }
 
         public Lister onlyPublic() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, Boolean.FALSE, isApproved);
         }
 
         @Override
         public PagedList<Photo> list() {
-            return new PagedListImpl<Photo,PhotoField>(connection, timeoutMsecs, endpoint,
+            return new PagedListImpl<Photo,PhotoField>(connection, config, endpoint,
                     Photo.class, fields, author, isPrivate, isApproved);
         }
     }    
@@ -183,10 +184,10 @@ public class Photos extends Items<Photo, PhotoField>
     {
         protected Photo photo;
 
-        protected PhotoUpdater(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected PhotoUpdater(NingConnection connection, NingClientConfig config, String endpoint,
                 Photo photo)
         {
-            super(connection, timeoutMsecs, endpoint);
+            super(connection, config, endpoint);
             this.photo = photo.clone();
         }
 

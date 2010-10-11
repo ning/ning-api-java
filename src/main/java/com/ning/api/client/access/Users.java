@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.joda.time.ReadableDateTime;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.impl.DefaultCounter;
 import com.ning.api.client.access.impl.DefaultFinder;
 import com.ning.api.client.access.impl.DefaultLister;
@@ -22,9 +23,9 @@ import com.ning.api.client.item.*;
  */
 public class Users extends Items<User, UserField>
 {
-    public Users(NingConnection connection)
+    public Users(NingConnection connection, NingClientConfig config)
     {
-        super(connection, "User", User.class, UserField.class);
+        super(connection, config, "User", User.class, UserField.class);
     }
     
     /*
@@ -36,7 +37,7 @@ public class Users extends Items<User, UserField>
      */
 
     public Counter counter(ReadableDateTime createdAfter) {
-        return new Counter(connection, defaultTimeoutForReadsMsecs, endpointForCount(),
+        return new Counter(connection, config, endpointForCount(),
                 createdAfter, null, null);
     }
 
@@ -47,7 +48,7 @@ public class Users extends Items<User, UserField>
     
     @Override
     public UserFinder finder(Fields<UserField> fields) {
-        return new UserFinder(connection, defaultTimeoutForReadsMsecs, endpointForSingle(), fields);
+        return new UserFinder(connection, config, endpointForSingle(), fields);
     }
 
     public UserLister listerForAlpha(UserField firstField, UserField... otherFields) {
@@ -55,7 +56,7 @@ public class Users extends Items<User, UserField>
     }
 
     public UserLister listerForAlpha(Fields<UserField> fields) {
-        return new UserLister(connection, defaultTimeoutForReadsMsecs, endpointForAlpha(), fields,
+        return new UserLister(connection, config, endpointForAlpha(), fields,
                 null, null, null);
     }
 
@@ -64,7 +65,7 @@ public class Users extends Items<User, UserField>
     }
 
     public UserLister listerForRecent(Fields<UserField> fields) {
-        return new UserLister(connection, defaultTimeoutForReadsMsecs, endpointForRecent(), fields,
+        return new UserLister(connection, config, endpointForRecent(), fields,
                 null, null, null);
     }
 
@@ -72,7 +73,7 @@ public class Users extends Items<User, UserField>
      * Constructs updater for updating user specific by given User object
      */
     public Updater<User> updater(User user) {
-        return new UserUpdater(connection, defaultTimeoutForUpdatesMsecs, endpointForPUT(), user);
+        return new UserUpdater(connection, config, endpointForPUT(), user);
     }
 
     /**
@@ -80,7 +81,7 @@ public class Users extends Items<User, UserField>
      * by client)
      */
     public Updater<User> updater() {
-        return new UserUpdater(connection, defaultTimeoutForUpdatesMsecs, endpointForPUT(), new User());
+        return new UserUpdater(connection, config, endpointForPUT(), new User());
     }
     
     /*
@@ -98,21 +99,21 @@ public class Users extends Items<User, UserField>
     {
         protected final Boolean isMember;
         
-        protected Counter(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected Counter(NingConnection connection, NingClientConfig config, String endpoint,
                 ReadableDateTime createdAfter, 
                 Boolean isApproved, Boolean isMember)
         {
-            super(connection, timeoutMsecs, endpoint, createdAfter, null, null, isApproved);
+            super(connection, config, endpoint, createdAfter, null, null, isApproved);
             this.isMember = isMember;
         }
 
         // no way to only include approved ones currently, so:
         public Counter unapproved() {
-            return new Counter(connection, timeoutMsecs, endpoint, createdAfter, Boolean.FALSE, isMember);
+            return new Counter(connection, config, endpoint, createdAfter, Boolean.FALSE, isMember);
         }
 
         public Counter onlyMembers() {
-            return new Counter(connection, timeoutMsecs, endpoint, createdAfter, isApproved, Boolean.TRUE);
+            return new Counter(connection, config, endpoint, createdAfter, isApproved, Boolean.TRUE);
         }
         
         @Override
@@ -130,8 +131,8 @@ public class Users extends Items<User, UserField>
      */
     public static class UserFinder extends DefaultFinder<User, UserField>
     {
-        public UserFinder(NingConnection connection, long timeoutMsecs, String endpoint, Fields<UserField> fields) {
-            super(connection, timeoutMsecs, endpoint, User.class, fields);
+        public UserFinder(NingConnection connection, NingClientConfig config, String endpoint, Fields<UserField> fields) {
+            super(connection, config, endpoint, User.class, fields);
         }
 
         // TODO: add "findUserByAuthorName()" variants!
@@ -140,12 +141,11 @@ public class Users extends Items<User, UserField>
         {
             NingHttpGet getter = prepareQuery();
             getter = getter.addQueryParameter("author", author);
-            return getter.execute(timeoutMsecs).asSingleItem(itemType);
+            return getter.execute(config.getReadTimeoutMsecs()).asSingleItem(itemType);
         }
 
         public List<User> findByAuthors(String... authors) {
-            // !!! TODO
-            return null;
+            throw new UnsupportedOperationException("Not yet implemented");
         }
     }
 
@@ -156,27 +156,27 @@ public class Users extends Items<User, UserField>
     {
         protected final Boolean isMember;
 
-        protected UserLister(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected UserLister(NingConnection connection, NingClientConfig config, String endpoint,
                 Fields<UserField> fields,String author, Boolean isApproved, Boolean isMember)
         {
-            super(connection, timeoutMsecs, endpoint, fields, author, null, isApproved);
+            super(connection, config, endpoint, fields, author, null, isApproved);
             this.isMember = isMember;
         }
 
         public UserLister author(String author) {
-            return new UserLister(connection, timeoutMsecs, endpoint, fields,
+            return new UserLister(connection, config, endpoint, fields,
                     author, isApproved, isMember);
         }
 
         
         // no way to only include approved ones currently, so:
         public UserLister unapproved() {
-            return new UserLister(connection, timeoutMsecs, endpoint, fields,
+            return new UserLister(connection, config, endpoint, fields,
                     author, Boolean.FALSE, isMember);
         }
 
         public UserLister onlyMembers() {
-            return new UserLister(connection, timeoutMsecs, endpoint, fields,
+            return new UserLister(connection, config, endpoint, fields,
                     author, isApproved, Boolean.TRUE);
         }
 
@@ -184,7 +184,7 @@ public class Users extends Items<User, UserField>
         public PagedList<User> list() {
             Param memberParam = (isMember == null) ? null : new Param("isMember", isMember.toString());
 
-            return new PagedListImpl<User,UserField>(connection, timeoutMsecs, endpoint,
+            return new PagedListImpl<User,UserField>(connection, config, endpoint,
                     User.class, fields, author, null, null, memberParam);
         }
     }    
@@ -193,10 +193,10 @@ public class Users extends Items<User, UserField>
     {
         protected User user;
 
-        protected UserUpdater(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected UserUpdater(NingConnection connection, NingClientConfig config, String endpoint,
                 User user)
         {
-            super(connection, timeoutMsecs, endpoint);
+            super(connection, config, endpoint);
             this.user = user;
         }
 

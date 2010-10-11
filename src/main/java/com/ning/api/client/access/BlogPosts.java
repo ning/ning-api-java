@@ -2,6 +2,7 @@ package com.ning.api.client.access;
 
 import org.joda.time.ReadableDateTime;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.impl.DefaultCounter;
 import com.ning.api.client.access.impl.DefaultCreator;
 import com.ning.api.client.access.impl.DefaultDeleter;
@@ -18,9 +19,9 @@ import com.ning.api.client.item.*;
 
 public class BlogPosts extends Items<BlogPost, BlogPostField>
 {
-    public BlogPosts(NingConnection connection)
+    public BlogPosts(NingConnection connection, NingClientConfig config)
     {
-        super(connection, "BlogPost", BlogPost.class, BlogPostField.class);
+        super(connection, config, "BlogPost", BlogPost.class, BlogPostField.class);
     }
 
     /*
@@ -30,16 +31,16 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
      */
 
     public Counter counter(ReadableDateTime createdAfter) {
-        return new Counter(connection, defaultTimeoutForReadsMsecs, endpointForCount(),
+        return new Counter(connection, config, endpointForCount(),
                 createdAfter, null, null, null);
     }
 
     public Creator<BlogPost> creator(BlogPost blogPost) {
-        return new BlogPostCreator(connection, defaultTimeoutForUpdatesMsecs, endpointForPOST(), blogPost);
+        return new BlogPostCreator(connection, config, endpointForPOST(), blogPost);
     }
     
     public final Deleter<BlogPost> deleter(Key<BlogPost> id) {
-        return new DefaultDeleter<BlogPost>(connection, defaultTimeoutForUpdatesMsecs, endpointForDELETE(), id);
+        return new DefaultDeleter<BlogPost>(connection, config, endpointForDELETE(), id);
     }
     
     public Lister listerForRecent(BlogPostField firstField, BlogPostField... otherFields) {
@@ -47,12 +48,12 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
     }
 
     public Lister listerForRecent(Fields<BlogPostField> fields) {
-        return new Lister(connection, defaultTimeoutForReadsMsecs, endpointForRecent(), fields,
+        return new Lister(connection, config, endpointForRecent(), fields,
                 null, null, null);
     }
 
     public Updater<BlogPost> updater(BlogPost blogPost) {
-        return new BlogPostUpdater(connection, defaultTimeoutForUpdatesMsecs, endpointForPUT(), blogPost);
+        return new BlogPostUpdater(connection, config, endpointForPUT(), blogPost);
     }
     
     /*
@@ -68,14 +69,14 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
      */
     public class Counter extends DefaultCounter
     {
-        protected Counter(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected Counter(NingConnection connection, NingClientConfig config, String endpoint,
                 ReadableDateTime createdAfter,
                 String author, Boolean isPrivate, Boolean isApproved) {
-            super(connection, timeoutMsecs, endpoint, createdAfter, author, isPrivate, isApproved);
+            super(connection, config, endpoint, createdAfter, author, isPrivate, isApproved);
         }
 
         protected Counter(Counter base, String author, Boolean isPrivate, Boolean isApproved) {
-            this(base.connection, base.timeoutMsecs, base.endpoint, base.createdAfter,
+            this(base.connection, base.config, base.endpoint, base.createdAfter,
                     author, isPrivate, isApproved);
         }
         
@@ -104,10 +105,10 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
     {
         protected BlogPost blogPost;
         
-        public BlogPostCreator(NingConnection connection, long timeoutMsecs, String endpoint,
+        public BlogPostCreator(NingConnection connection, NingClientConfig config, String endpoint,
                 BlogPost blogPost)
         {
-            super(connection, timeoutMsecs, endpoint);
+            super(connection, config, endpoint);
             this.blogPost = blogPost.clone();
         }
 
@@ -180,40 +181,40 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
      */
     public static class Lister extends DefaultLister<BlogPost, BlogPostField>
     {
-        protected Lister(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected Lister(NingConnection connection, NingClientConfig config, String endpoint,
                 Fields<BlogPostField> fields,String author, Boolean isPrivate, Boolean isApproved)
         {
-            super(connection, timeoutMsecs, endpoint, fields, author, isPrivate, isApproved);
+            super(connection, config, endpoint, fields, author, isPrivate, isApproved);
         }
 
         public Lister author(String author) {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, isApproved);
         }
 
         public Lister approved() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, Boolean.TRUE);
         }
         
         public Lister unapproved() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, Boolean.FALSE);
         }
         
         public Lister onlyPrivate() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, Boolean.TRUE, isApproved);
         }
 
         public Lister onlyPublic() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     author, Boolean.FALSE, isApproved);
         }
 
         @Override
         public PagedList<BlogPost> list() {
-            return new PagedListImpl<BlogPost,BlogPostField>(connection, timeoutMsecs, endpoint,
+            return new PagedListImpl<BlogPost,BlogPostField>(connection, config, endpoint,
                     BlogPost.class, fields, author, isPrivate, isApproved);
         }
     }    
@@ -222,10 +223,10 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
     {
         protected BlogPost blogPost;
 
-        protected BlogPostUpdater(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected BlogPostUpdater(NingConnection connection, NingClientConfig config, String endpoint,
                 BlogPost blogPost)
         {
-            super(connection, timeoutMsecs, endpoint);
+            super(connection, config, endpoint);
             this.blogPost = blogPost.clone();
         }
 

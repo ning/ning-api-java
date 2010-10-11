@@ -2,6 +2,7 @@ package com.ning.api.client.access;
 
 import org.joda.time.ReadableDateTime;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.impl.DefaultCounter;
 import com.ning.api.client.access.impl.DefaultDeleter;
 import com.ning.api.client.access.impl.DefaultLister;
@@ -12,9 +13,9 @@ import com.ning.api.client.item.*;
 
 public class Activities extends Items<Activity, ActivityField>
 {
-    public Activities(NingConnection connection)
+    public Activities(NingConnection connection, NingClientConfig config)
     {
-        super(connection, "Activity", Activity.class, ActivityField.class);
+        super(connection, config, "Activity", Activity.class, ActivityField.class);
     }
 
     /*
@@ -24,14 +25,14 @@ public class Activities extends Items<Activity, ActivityField>
      */
 
     public ActivityCounter counter(ReadableDateTime since) {
-        return new ActivityCounter(connection, defaultTimeoutForReadsMsecs, endpointForCount(), since, null);
+        return new ActivityCounter(connection, config, endpointForCount(), since, null);
     }
 
     public final Deleter<Activity> deleter(String id) {
         return deleter(new Key<Activity>(id));
     }
     public final Deleter<Activity> deleter(Key<Activity> id) {
-        return new DefaultDeleter<Activity>(connection, defaultTimeoutForUpdatesMsecs, endpointForDELETE(), id);
+        return new DefaultDeleter<Activity>(connection, config, endpointForDELETE(), id);
     }
     
     public Lister listerForRecent(ActivityField firstField, ActivityField... otherFields) {
@@ -39,7 +40,7 @@ public class Activities extends Items<Activity, ActivityField>
     }
     
     public Lister listerForRecent(Fields<ActivityField> fields) {
-        return new Lister(connection, defaultTimeoutForReadsMsecs, endpointForRecent(), fields, null);
+        return new Lister(connection, config, endpointForRecent(), fields, null);
     }
     
     /*
@@ -55,31 +56,31 @@ public class Activities extends Items<Activity, ActivityField>
      */
     public class ActivityCounter extends DefaultCounter
     {
-        protected ActivityCounter(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected ActivityCounter(NingConnection connection, NingClientConfig config, String endpoint,
                 ReadableDateTime createdAfter, String author) {
-            super(connection, timeoutMsecs, endpoint, createdAfter, author, null, null);
+            super(connection, config, endpoint, createdAfter, author, null, null);
         }
 
         public ActivityCounter author(String author) {
-            return new ActivityCounter(connection, timeoutMsecs, endpoint, createdAfter, author);
+            return new ActivityCounter(connection, config, endpoint, createdAfter, author);
         }
     }
 
     public static class Lister extends DefaultLister<Activity, ActivityField>
     {
-        protected Lister(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected Lister(NingConnection connection, NingClientConfig config, String endpoint,
                 Fields<ActivityField> fields, String author)
         {
-            super(connection, timeoutMsecs, endpoint, fields, author, null, null);
+            super(connection, config, endpoint, fields, author, null, null);
         }
 
         public Lister author(String author) {
-            return new Lister(connection, timeoutMsecs, endpoint, fields, author);
+            return new Lister(connection, config, endpoint, fields, author);
         }
 
         @Override
         public PagedList<Activity> list() {
-            return new PagedListImpl<Activity,ActivityField>(connection, timeoutMsecs, endpoint,
+            return new PagedListImpl<Activity,ActivityField>(connection, config, endpoint,
                     Activity.class, fields, author, null, null);
         }
     }    

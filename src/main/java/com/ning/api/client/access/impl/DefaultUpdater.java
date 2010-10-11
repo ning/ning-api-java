@@ -1,5 +1,6 @@
 package com.ning.api.client.access.impl;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.Updater;
@@ -14,17 +15,17 @@ public abstract class DefaultUpdater <C extends ContentItem<?,C>> implements Upd
     /**
      * Timeout to use for calls
      */
-    protected final long timeoutMsecs;
+    protected NingClientConfig config;
 
     /**
      * Request end point used for fetching items
      */
     protected final String endpoint;
 
-    protected DefaultUpdater(NingConnection connection, long timeoutMsecs, String endpoint)
+    protected DefaultUpdater(NingConnection connection, NingClientConfig config, String endpoint)
     {
         this.connection = connection;
-        this.timeoutMsecs = timeoutMsecs;
+        this.config = config;
         this.endpoint = endpoint;
     }
     
@@ -32,7 +33,7 @@ public abstract class DefaultUpdater <C extends ContentItem<?,C>> implements Upd
     public void update() throws NingClientException
     {
         NingHttpPut put = buildUpdate();
-        NingHttpResponse  response = put.execute(timeoutMsecs);
+        NingHttpResponse  response = put.execute(config.getWriteTimeoutMsecs());
         response.verifyResponse();
     }
 

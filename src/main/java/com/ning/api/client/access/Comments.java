@@ -1,5 +1,6 @@
 package com.ning.api.client.access;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.impl.DefaultCreator;
 import com.ning.api.client.access.impl.DefaultDeleter;
 import com.ning.api.client.access.impl.DefaultLister;
@@ -13,9 +14,9 @@ import com.ning.api.client.item.*;
 
 public class Comments extends Items<Comment, CommentField>
 {
-    public Comments(NingConnection connection)
+    public Comments(NingConnection connection, NingClientConfig config)
     {
-        super(connection, "Comment", Comment.class, CommentField.class);
+        super(connection, config, "Comment", Comment.class, CommentField.class);
     }
 
     /*
@@ -25,7 +26,7 @@ public class Comments extends Items<Comment, CommentField>
      */
 
     public final Deleter<Comment> deleter(Key<Comment> id) {
-        return new DefaultDeleter<Comment>(connection, defaultTimeoutForUpdatesMsecs, endpointForDELETE(), id);
+        return new DefaultDeleter<Comment>(connection, config, endpointForDELETE(), id);
     }
 
     /**
@@ -39,12 +40,12 @@ public class Comments extends Items<Comment, CommentField>
      * @param attachedTo Item that comments to retrieve are attached to
      */
     public Lister listerForRecent(Key<?> attachedTo, Fields<CommentField> fields) {
-        return new Lister(connection, defaultTimeoutForReadsMsecs, endpointForRecent(), fields,
+        return new Lister(connection, config, endpointForRecent(), fields,
                 null, attachedTo);
     }
 
     public Creator<Comment> creator(Comment comment) {
-        return new CommentCreator(connection, defaultTimeoutForUpdatesMsecs, endpointForPOST(), comment);
+        return new CommentCreator(connection, config, endpointForPOST(), comment);
     }
     
     protected static Param attachedToParam(Key<?> attachedTo)
@@ -65,26 +66,26 @@ public class Comments extends Items<Comment, CommentField>
     {
         protected final Key<?> attachedTo;
         
-        protected Lister(NingConnection connection, long timeoutMsecs, String endpoint,
+        protected Lister(NingConnection connection, NingClientConfig config, String endpoint,
                 Fields<CommentField> fields, Boolean isApproved, Key<?> attachedTo)
         {
-            super(connection, timeoutMsecs, endpoint, fields, null, null, isApproved);
+            super(connection, config, endpoint, fields, null, null, isApproved);
             this.attachedTo = attachedTo;
         }
 
         public Lister approved() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     Boolean.TRUE, attachedTo);
         }
         
         public Lister unapproved() {
-            return new Lister(connection, timeoutMsecs, endpoint, fields,
+            return new Lister(connection, config, endpoint, fields,
                     Boolean.FALSE, attachedTo);
         }
         
         @Override
         public PagedList<Comment> list() {
-            return new PagedListImpl<Comment,CommentField>(connection, timeoutMsecs, endpoint,
+            return new PagedListImpl<Comment,CommentField>(connection, config, endpoint,
                     Comment.class, fields, null, null, isApproved,
                     attachedToParam(attachedTo));
         }
@@ -95,10 +96,10 @@ public class Comments extends Items<Comment, CommentField>
         protected final Key<? extends ContentItem<?,?>> attachedTo;
         protected final String description;
         
-        public CommentCreator(NingConnection connection, long timeoutMsecs, String endpoint,
+        public CommentCreator(NingConnection connection, NingClientConfig config, String endpoint,
                 Comment comment)
         {
-            super(connection, timeoutMsecs, endpoint);
+            super(connection, config, endpoint);
             attachedTo = comment.getAttachedTo();
             description = comment.getDescription();
         }

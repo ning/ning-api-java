@@ -1,5 +1,6 @@
 package com.ning.api.client.access.impl;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.Creator;
@@ -14,17 +15,17 @@ public abstract class DefaultCreator<C extends ContentItem<?,C>> implements Crea
     /**
      * Timeout to use for calls
      */
-    protected final long timeoutMsecs;
+    protected NingClientConfig config;
 
     /**
      * Request end point used for fetching items
      */
     protected final String endpoint;
 
-    protected DefaultCreator(NingConnection connection, long timeoutMsecs, String endpoint)
+    protected DefaultCreator(NingConnection connection, NingClientConfig config, String endpoint)
     {
         this.connection = connection;
-        this.timeoutMsecs = timeoutMsecs;
+        this.config = config;
         this.endpoint = endpoint;
     }
     
@@ -32,7 +33,7 @@ public abstract class DefaultCreator<C extends ContentItem<?,C>> implements Crea
     public void create() throws NingClientException
     {
         NingHttpPost post = buildCreate();
-        NingHttpResponse  response = post.execute(timeoutMsecs);
+        NingHttpResponse  response = post.execute(config.getWriteTimeoutMsecs());
         response.verifyResponse();
     }
 

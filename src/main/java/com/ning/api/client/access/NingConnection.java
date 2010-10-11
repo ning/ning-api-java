@@ -4,6 +4,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.ning.http.client.SignatureCalculator;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.auth.AuthEntry;
 import com.ning.api.client.auth.OAuthSignatureCalculator;
 import com.ning.api.client.http.NingHttpClient;
@@ -18,57 +19,57 @@ import com.ning.api.client.http.NingHttpPut;
  */
 public class NingConnection
 {
-
     // // // Helper objects:
 
-    private final NingHttpClient httpClient;
+    protected final NingHttpClient httpClient;
 
-    private final SignatureCalculator signatureCalculator;
+    protected final SignatureCalculator signatureCalculator;
     
     /**
-     * URL prefix for external API request when using non-secure endpoint.
+     * URL prefix for external API request when using non-secure end point.
      */
-    private final String xapiPrefixRegular;
+    protected final String xapiPrefixRegular;
 
     /**
-     * URL prefix for external API request when using secure endpoint.
+     * URL prefix for external API request when using secure end point.
      */
-    private final String xapiPrefixSecure;
+    protected final String xapiPrefixSecure;
 
-    private final long defaultTimeoutMsecs;
-
-    // // // Accessors:
+    /**
+     * Configuration of connection settings for this connection
+     */
+    protected NingClientConfig config;
     
-    private final Activities activities;
-    private final BlogPosts blogPosts;
-    private final BroadcastMessages broadcastMessages;
-    private final Comments comments;
-    private final Networks networks;
-    private final Photos photos;
-    private final Users users;
-    private final Videos videos;
-    
-    public NingConnection(ObjectMapper objectMapper,
+    public NingConnection(NingClientConfig config,
+            ObjectMapper objectMapper,
             AuthEntry consumerAuth, AuthEntry userAuth,
             NingHttpClient httpClient,
-            String xapiPrefixRegular, String xapiPrefixSecure,
-            long defaultTimeoutMsecs)
+            String xapiPrefixRegular, String xapiPrefixSecure)
     {
         this.httpClient = httpClient;
         signatureCalculator = new OAuthSignatureCalculator(consumerAuth, userAuth);
 
         this.xapiPrefixRegular = xapiPrefixRegular;
         this.xapiPrefixSecure = xapiPrefixSecure;
-        this.defaultTimeoutMsecs = defaultTimeoutMsecs;
+        this.config = config;
+    }
 
-        activities = new Activities(this);
-        blogPosts = new BlogPosts(this);
-        broadcastMessages = new BroadcastMessages(this);
-        comments = new Comments(this);
-        networks = new Networks(this);
-        photos = new Photos(this);
-        users = new Users(this);
-        videos = new Videos(this);
+    /*
+    ///////////////////////////////////////////////////////////////////////
+    // Public API: configuration
+    ///////////////////////////////////////////////////////////////////////
+     */
+
+    public NingClientConfig getConfig() { return config; }
+
+    /**
+     * Method for overriding configuration of this connection object with
+     * specified overrides. Resulting configuration will be used as the
+     * default configuration for accessors.
+     */
+    public void overrideConfig(NingClientConfig configOverrides) {
+        // note: we will merge settings, to ensure there are defaults of some kind
+        this.config = config.overrideWith(configOverrides);
     }
 
     /*
@@ -77,14 +78,14 @@ public class NingConnection
     ///////////////////////////////////////////////////////////////////////
      */
 
-    public Activities activities() { return activities; }
-    public BlogPosts blogPosts() { return blogPosts; }
-    public BroadcastMessages broadcastMessages() { return broadcastMessages; }
-    public Comments comments() { return comments; }
-    public Networks networks() { return networks; }
-    public Photos photos() { return photos; }
-    public Users users() { return users; }
-    public Videos videos() { return videos; }
+    public Activities activities() { return new Activities(this, config); }
+    public BlogPosts blogPosts() { return new BlogPosts(this, config); }
+    public BroadcastMessages broadcastMessages() { return new BroadcastMessages(this, config); }
+    public Comments comments() { return new Comments(this, config); }
+    public Networks networks() { return new Networks(this, config); }
+    public Photos photos() { return new Photos(this, config); }
+    public Users users() { return new Users(this, config); }
+    public Videos videos() { return new Videos(this, config); }
     
     /*
     ///////////////////////////////////////////////////////////////////////
@@ -115,14 +116,6 @@ public class NingConnection
         String url = regularPrefixFor(endpoint);
         return httpClient.preparePut(url, signatureCalculator);
     }
-    
-    /*
-    ///////////////////////////////////////////////////////////////////////
-    // Public API for accessors, HTTP method construction
-    ///////////////////////////////////////////////////////////////////////
-     */
-
-    public long getDefaultTimeoutMsecs() { return defaultTimeoutMsecs; }
     
     /*
     ///////////////////////////////////////////////////////////////////////

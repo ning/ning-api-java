@@ -1,5 +1,6 @@
 package com.ning.api.client.access;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.access.impl.DefaultFinder;
 import com.ning.api.client.action.Finder;
 import com.ning.api.client.item.ContentItem;
@@ -23,9 +24,13 @@ public abstract class Items<
    F extends Enum<F> & Typed // set of fields used for filtering
 >
 {
-    // // // Misc constants
-    
     protected final NingConnection connection;
+
+    /**
+     * Current configuration used for operations for accessing
+     * items.
+     */
+    protected NingClientConfig config;
 
     /**
      * Part of end point path that differs between resource type; typically
@@ -37,29 +42,34 @@ public abstract class Items<
 
     protected final Class<F> fieldType;
     
-    /**
-     * Timeout period to use for read methods.
-     */
-    protected final long defaultTimeoutForReadsMsecs;
-
-    /**
-     * Timeout period to use for update (PUT, POST) methods.
-     */
-    protected final long defaultTimeoutForUpdatesMsecs;
-    
-    protected Items(NingConnection connection, String endpointBase,
-            Class<C> itemType, Class<F> fieldType)
+    protected Items(NingConnection connection, NingClientConfig config,
+            String endpointBase, Class<C> itemType, Class<F> fieldType)
     {
         this.connection = connection;
         this.endpointBase = endpointBase;
         this.itemType = itemType;
         this.fieldType = fieldType;
-        defaultTimeoutForReadsMsecs = connection.getDefaultTimeoutMsecs();
-        
-        // for now let's use twice as long timeout period for updates as reads:
-        defaultTimeoutForUpdatesMsecs = defaultTimeoutForReadsMsecs * 2;
+        this.config = config;
     }
 
+    /*
+    ///////////////////////////////////////////////////////////////////////
+    // Public API: configuration
+    ///////////////////////////////////////////////////////////////////////
+     */
+    
+    public NingClientConfig getConfig() { return config; }
+
+    /**
+     * Method for overriding configuration of this object with
+     * specified overrides. Resulting configuration will be used as the
+     * default configuration for all accessors created by this object.
+     */
+    public void setConfig(NingClientConfig configOverrides) {
+        // note: we will merge settings, to ensure there are defaults of some kind
+        this.config = config.overrideWith(configOverrides);
+    }
+    
     /*
     ///////////////////////////////////////////////////////////////////////
     // Public API: constructing request builders
@@ -73,7 +83,7 @@ public abstract class Items<
 
     // non-final to allow custom Finder types
     public Finder<C> finder(Fields<F> fields) {
-        return new DefaultFinder<C,F>(connection, defaultTimeoutForReadsMsecs, endpointForRecent(),
+        return new DefaultFinder<C,F>(connection, config, endpointForRecent(),
                 itemType, fields);
     }
 

@@ -2,6 +2,7 @@ package com.ning.api.client.access.impl;
 
 import org.joda.time.ReadableDateTime;
 
+import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.action.Counter;
@@ -19,7 +20,7 @@ public abstract class DefaultCounter
     /**
      * Timeout to use for calls
      */
-    protected final long timeoutMsecs;
+    protected final NingClientConfig config;
 
     /**
      * Request end point used for fetching items
@@ -42,12 +43,12 @@ public abstract class DefaultCounter
 
     protected final Boolean isApproved;
     
-    public DefaultCounter(NingConnection connection, long timeoutMsecs, String endpoint,
+    public DefaultCounter(NingConnection connection, NingClientConfig config, String endpoint,
             ReadableDateTime createdAfter, String author,
             Boolean isPrivate, Boolean isApproved)
     {
         this.connection = connection;
-        this.timeoutMsecs = timeoutMsecs;
+        this.config = config;
         this.endpoint = endpoint;
         
         this.createdAfter = createdAfter;
@@ -61,7 +62,7 @@ public abstract class DefaultCounter
     public int count() throws NingClientException
     {
         NingHttpGet getter = buildQuery();
-        Integer count = getter.execute(timeoutMsecs).asCount();
+        Integer count = getter.execute(config.getReadTimeoutMsecs()).asCount();
         if (count == null) { // should never occur, but:
             throw new NingTransformException("Response did not contain 'count' property");
         }
