@@ -37,11 +37,11 @@ public class OAuthSignatureCalculator
     
     protected final ThreadSafeHMAC mac;
 
-    protected final AuthEntry consumerAuth;
+    protected final ConsumerKey consumerAuth;
     
     protected final AuthEntry userAuth;
 
-    public OAuthSignatureCalculator(AuthEntry consumerAuth, AuthEntry userAuth)
+    public OAuthSignatureCalculator(ConsumerKey consumerAuth, AuthEntry userAuth)
     {
         mac = new ThreadSafeHMAC(consumerAuth, userAuth);
         this.consumerAuth = consumerAuth;

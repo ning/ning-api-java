@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.ConsumerKey;
 import com.ning.api.client.http.NingHttpClient;
 import com.ning.api.client.http.NingHttpException;
 import com.ning.api.client.http.NingHttpPost;
@@ -52,7 +53,7 @@ public class NingClient
      * Consumer authorization credentials that Ning has created for
      * the network in question
      */
-    protected final AuthEntry consumerAuth;
+    protected final ConsumerKey consumerAuth;
 
     /**
      * URL prefix for external API request when using non-secure endpoint.
@@ -80,17 +81,17 @@ public class NingClient
     /////////////////////////////////////////////////////////////////////////
      */
     
-    public NingClient(String networkId, AuthEntry consumerAuth)
+    public NingClient(String networkId, ConsumerKey consumerAuth)
     {
         this(networkId, consumerAuth, null);
     }
     
-    public NingClient(String networkId, AuthEntry consumerAuth, String host)
+    public NingClient(String networkId, ConsumerKey consumerAuth, String host)
     {
         this(networkId, consumerAuth, host, -1, -1);
     }
 
-    public NingClient(String networkId, AuthEntry consumerAuth, String host, int port, int securePort)
+    public NingClient(String networkId, ConsumerKey consumerAuth, String host, int port, int securePort)
     {
         this.networkId = networkId;
         this.consumerAuth = consumerAuth;

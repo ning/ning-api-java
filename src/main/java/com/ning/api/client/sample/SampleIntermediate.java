@@ -2,6 +2,7 @@ package com.ning.api.client.sample;
 
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.ConsumerKey;
 
 /**
  * Intermediate base class just to encapsulate credential info here, for now
@@ -22,9 +23,10 @@ public abstract class SampleIntermediate extends SampleBase
     {
       super(hostname, httpPort, httpsPort, network);
     }
-    
-    protected AuthEntry getConsumerKey() {
-        return new AuthEntry(TEST_CONSUMER_KEY, TEST_CONSUMER_SECRET);
+
+    @Override
+    protected ConsumerKey getConsumerKey() {
+        return new ConsumerKey(TEST_CONSUMER_KEY, TEST_CONSUMER_SECRET);
     }
 
     public AuthEntry getUserToken() {

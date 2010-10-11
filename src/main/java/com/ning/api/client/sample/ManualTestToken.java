@@ -3,7 +3,7 @@ package com.ning.api.client.sample;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.ning.api.client.NingClient;
-import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.ConsumerKey;
 import com.ning.api.client.item.Token;
 
 /**
@@ -24,7 +24,7 @@ public class ManualTestToken
     {
         System.out.println("About to construct client, generate security token:");
         NingClient client = new NingClient(TEST_NETWORK,
-                new AuthEntry(TEST_CONSUMER_KEY, TEST_CONSUMER_SECRET),
+                new ConsumerKey(TEST_CONSUMER_KEY, TEST_CONSUMER_SECRET),
                 SampleBase.DEFAULT_XAPI_HOST, 80, 443);
         Token token = client.createToken(USER_EMAIL, USER_PASS);
 

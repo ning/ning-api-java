@@ -6,6 +6,7 @@ import com.ning.http.client.SignatureCalculator;
 
 import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.ConsumerKey;
 import com.ning.api.client.auth.OAuthSignatureCalculator;
 import com.ning.api.client.http.NingHttpClient;
 import com.ning.api.client.http.NingHttpDelete;
@@ -42,7 +43,7 @@ public class NingConnection
     
     public NingConnection(NingClientConfig config,
             ObjectMapper objectMapper,
-            AuthEntry consumerAuth, AuthEntry userAuth,
+            ConsumerKey consumerAuth, AuthEntry userAuth,
             NingHttpClient httpClient,
             String xapiPrefixRegular, String xapiPrefixSecure)
     {
