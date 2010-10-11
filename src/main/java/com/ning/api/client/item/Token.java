@@ -2,7 +2,7 @@ package com.ning.api.client.item;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.RequestToken;
 
 /**
  *<p>
@@ -30,7 +30,7 @@ public class Token
      * Note that if either 'token' or 'tokenSecret' is missing, will throw
      * {@link IllegalStateException}.
      */
-    public AuthEntry asTokenAuthEntry()
+    public RequestToken asTokenAuthEntry()
     {
         if (oauthToken == null) {
             throw new IllegalStateException("oauthToken property null");
@@ -38,6 +38,6 @@ public class Token
         if (oauthTokenSecret== null) {
             throw new IllegalStateException("oauthTokenSecret property null");
         }
-        return new AuthEntry(oauthToken, oauthTokenSecret);
+        return new RequestToken(oauthToken, oauthTokenSecret);
     }
 }

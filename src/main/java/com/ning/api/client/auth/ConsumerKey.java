@@ -1,7 +1,7 @@
 package com.ning.api.client.auth;
 
 /**
- * Value class to contain OAuth consumer keys.
+ * Value class for OAuth consumer keys.
  */
 public class ConsumerKey
 {
@@ -15,7 +15,7 @@ public class ConsumerKey
     }
 
     public String getKey() { return key; }
-    public String getToken() { return secret; }
+    public String getSecret() { return secret; }
 
     @Override public String toString()
     {

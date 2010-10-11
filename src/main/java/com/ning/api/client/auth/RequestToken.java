@@ -1,29 +1,30 @@
 package com.ning.api.client.auth;
 
 /**
- * Simple container of an authorization property pair; public id part ("key"),
- * and confidential part ("secret"). Used for multiple use cases
+ * Value class used for OAuth tokens (request secret, access secret);
+ * simple container with two parts, public id part ("key") and
+ * confidential ("secret") part.
  */
-public class AuthEntry
+public class RequestToken
 {
     private final String key;
-    private final String token;
+    private final String secret;
 
-    public AuthEntry(String key, String token)
+    public RequestToken(String key, String token)
     {
         this.key = key;
-        this.token = token;
+        this.secret = token;
     }
 
     public String getKey() { return key; }
-    public String getToken() { return token; }
+    public String getSecret() { return secret; }
 
     @Override public String toString()
     {
         StringBuilder sb = new StringBuilder("{ key=");
         appendValue(sb, key);
-        sb.append(", token=");
-        appendValue(sb, token);
+        sb.append(", secret=");
+        appendValue(sb, secret);
         sb.append("}");
         return sb.toString();
     }
@@ -40,14 +41,14 @@ public class AuthEntry
     }
 
     @Override public int hashCode() {
-        return key.hashCode() + token.hashCode();
+        return key.hashCode() + secret.hashCode();
     }
     
     @Override public boolean equals(Object o)
     {
         if (o == this) return true;
         if (o == null || o.getClass() != getClass()) return false;
-        AuthEntry other = (AuthEntry) o;
-        return key.equals(other.key) && token.equals(other.token);
+        RequestToken other = (RequestToken) o;
+        return key.equals(other.key) && secret.equals(other.secret);
     }
 }

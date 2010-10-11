@@ -23,7 +23,7 @@ public class TestSignatureCalculator
     public void test()
     {
         ConsumerKey consumer = new ConsumerKey(CONSUMER_KEY, CONSUMER_SECRET);
-        AuthEntry user = new AuthEntry(TOKEN_KEY, TOKEN_SECRET);
+        RequestToken user = new RequestToken(TOKEN_KEY, TOKEN_SECRET);
         OAuthSignatureCalculator calc = new OAuthSignatureCalculator(consumer, user);
         FluentStringsMap queryParams = new FluentStringsMap();
         queryParams.add("file", "vacation.jpg");

@@ -1,7 +1,7 @@
 package com.ning.api.client.sample;
 
 import com.ning.api.client.access.NingConnection;
-import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.RequestToken;
 import com.ning.api.client.auth.ConsumerKey;
 
 /**
@@ -29,8 +29,8 @@ public abstract class SampleIntermediate extends SampleBase
         return new ConsumerKey(TEST_CONSUMER_KEY, TEST_CONSUMER_SECRET);
     }
 
-    public AuthEntry getUserToken() {
-        return new AuthEntry(TEST_USER_KEY, TEST_USER_TOKEN);
+    public RequestToken getUserToken() {
+        return new RequestToken(TEST_USER_KEY, TEST_USER_TOKEN);
     }
     
     protected abstract void doAction(NingConnection conn) throws Exception;

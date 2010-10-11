@@ -2,7 +2,7 @@ package com.ning.api.client.sample;
 
 import com.ning.api.client.NingClient;
 import com.ning.api.client.access.NingConnection;
-import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.RequestToken;
 import com.ning.api.client.auth.ConsumerKey;
 
 public abstract class SampleBase
@@ -37,7 +37,7 @@ public abstract class SampleBase
     }
 
     protected abstract ConsumerKey getConsumerKey();
-    protected abstract AuthEntry getUserToken();
+    protected abstract RequestToken getUserToken();
 
     public void action() throws Exception
     {

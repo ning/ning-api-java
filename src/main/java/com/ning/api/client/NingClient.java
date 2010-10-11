@@ -6,7 +6,7 @@ import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.ning.api.client.access.NingConnection;
-import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.RequestToken;
 import com.ning.api.client.auth.ConsumerKey;
 import com.ning.api.client.http.NingHttpClient;
 import com.ning.api.client.http.NingHttpException;
@@ -157,7 +157,7 @@ public class NingClient
         // and then authorization as "application/x-www-form-urlencoded"
         post = post.addFormParameter("oauth_signature_method","PLAINTEXT")
             .addFormParameter("oauth_consumer_key", consumerAuth.getKey())
-            .addFormParameter("oauth_signature", consumerAuth.getToken()+"&")
+            .addFormParameter("oauth_signature", consumerAuth.getSecret()+"&")
             ;
         
         // And then make the call
@@ -194,7 +194,7 @@ public class NingClient
      * Method for creating {@link NingConnection} to access resources using
      * specified User token, and default configuration settings.
      */
-    public NingConnection connect(AuthEntry userAuth)
+    public NingConnection connect(RequestToken userAuth)
     {
         return connect(userAuth, null);
     }
@@ -204,7 +204,7 @@ public class NingClient
      * specified User token, and specified configuration overrides (above
      * and beyond default client configuration settings)
      */
-    public NingConnection connect(AuthEntry userAuth, NingClientConfig config)
+    public NingConnection connect(RequestToken userAuth, NingClientConfig config)
     {
         NingClientConfig connectionConfig = config.overrideWith(config);
         return new NingConnection(connectionConfig, objectMapper, consumerAuth, userAuth, httpClient,

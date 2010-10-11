@@ -7,7 +7,18 @@ import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilderBase;
 import com.ning.http.client.SignatureCalculator;
 import com.ning.http.util.Base64;
+import com.ning.http.util.UTF8UrlEncoder;
 
+/**
+ * Simple OAuth signature calculator that can used for constructing client signatures
+ * for accessing services that use OAuth for authorization.
+ *<p>
+ * Supports most common signature inclusion and calculation methods: HMAC-SHA1 for
+ * calculation, and Header inclusion as inclusion method. Nonce generation uses
+ * simple random numbers with base64 encoding.
+ * 
+ * @author tatu (tatu.saloranta@iki.fi)
+ */
 public class OAuthSignatureCalculator
     implements SignatureCalculator
 {
@@ -25,7 +36,6 @@ public class OAuthSignatureCalculator
     private final String OAUTH_SIGNATURE_METHOD = "HMAC-SHA1";
 
     protected final static UTF8Codec utf8Codec = new UTF8Codec();
-    protected final static UTF8UrlCodec urlEncoder = new UTF8UrlCodec();
     
     /**
      * To generate Nonce, need some (pseudo)randomness; no need for
@@ -39,9 +49,13 @@ public class OAuthSignatureCalculator
 
     protected final ConsumerKey consumerAuth;
     
-    protected final AuthEntry userAuth;
+    protected final RequestToken userAuth;
 
-    public OAuthSignatureCalculator(ConsumerKey consumerAuth, AuthEntry userAuth)
+    /**
+     * @param consumerAuth Consumer key to use for signature calculation
+     * @param userAuth Request/access token to use for signature calculation
+     */
+    public OAuthSignatureCalculator(ConsumerKey consumerAuth, RequestToken userAuth)
     {
         mac = new ThreadSafeHMAC(consumerAuth, userAuth);
         this.consumerAuth = consumerAuth;
@@ -70,8 +84,8 @@ public class OAuthSignatureCalculator
         signedText.append(method); // POST / GET etc (nothing to URL encode)
         signedText.append('&');
 
-        /* 07-Oct-2010, tatu: URL may contain default port number; if so, need to extract for
-         *  calculation...
+        /* 07-Oct-2010, tatu: URL may contain default port number; if so, need to extract
+         *   from base URL.
          */
         if (baseURL.startsWith("http:")) {
             int i = baseURL.indexOf(":80/", 4);
@@ -84,7 +98,7 @@ public class OAuthSignatureCalculator
                 baseURL = baseURL.substring(0, i) + baseURL.substring(i+4);
             }                
         }
-        signedText.append(urlEncoder.encode(baseURL));
+        signedText.append(UTF8UrlEncoder.encode(baseURL));
 
         /**
          * List of all query and form parameters added to this request; needed
@@ -120,7 +134,7 @@ public class OAuthSignatureCalculator
         
         // and all that needs to be URL encoded (... again!)
         signedText.append('&');
-        urlEncoder.appendEncoded(signedText, encodedParams);
+        UTF8UrlEncoder.appendEncoded(signedText, encodedParams);
         
         byte[] rawBase = utf8Codec.toUTF8(signedText.toString());
         byte[] rawSignature = mac.digest(rawBase);
@@ -141,12 +155,12 @@ public class OAuthSignatureCalculator
 
         // careful: base64 has chars that need URL encoding:
         sb.append(KEY_OAUTH_SIGNATURE).append("=\"");
-        urlEncoder.appendEncoded(sb, signature).append("\", ");
+        UTF8UrlEncoder.appendEncoded(sb, signature).append("\", ");
         sb.append(KEY_OAUTH_TIMESTAMP).append("=\"").append(oauthTimestamp).append("\", ");
 
         // also: nonce may contain things that need URL encoding (esp. when using base64):
         sb.append(KEY_OAUTH_NONCE).append("=\"");
-        urlEncoder.appendEncoded(sb, nonce);
+        UTF8UrlEncoder.appendEncoded(sb, nonce);
         sb.append("\", ");
 
         sb.append(KEY_OAUTH_VERSION).append("=\"").append(OAUTH_VERSION_1_0).append("\"");
@@ -156,7 +170,7 @@ public class OAuthSignatureCalculator
     private synchronized String generateNonce()
     {
         random.nextBytes(nonceBuffer);
-        // let's use base64 encoding over hex, slightly more compact
+        // let's use base64 encoding over hex, slightly more compact than hex or decimals
         return Base64.encode(nonceBuffer);
 //      return String.valueOf(Math.abs(random.nextLong()));
     }
@@ -165,8 +179,9 @@ public class OAuthSignatureCalculator
      * Container for parameters used for calculating OAuth signature.
      * About the only confusing aspect is that of whether entries are to be sorted
      * before encoded or vice versa: if my reading is correct, encoding is to occur
-     * first, then sorting; but this should rarely matter (since sorting is primary
-     * by key, which usually has nothing to encode)
+     * first, then sorting; although this should rarely matter (since sorting is primary
+     * by key, which usually has nothing to encode)... of course, rarely means that
+     * when it would occur it'd be harder to track down.
      */
     final static class OAuthParameterSet
     {
@@ -176,7 +191,7 @@ public class OAuthSignatureCalculator
 
         public OAuthParameterSet add(String key, String value)
         {
-            Parameter p =  new Parameter(urlEncoder.encode(key), urlEncoder.encode(value));
+            Parameter p =  new Parameter(UTF8UrlEncoder.encode(key), UTF8UrlEncoder.encode(value));
             allParameters.add(p);
             return this;
         }

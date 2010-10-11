@@ -5,7 +5,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.ning.http.client.SignatureCalculator;
 
 import com.ning.api.client.NingClientConfig;
-import com.ning.api.client.auth.AuthEntry;
+import com.ning.api.client.auth.RequestToken;
 import com.ning.api.client.auth.ConsumerKey;
 import com.ning.api.client.auth.OAuthSignatureCalculator;
 import com.ning.api.client.http.NingHttpClient;
@@ -43,7 +43,7 @@ public class NingConnection
     
     public NingConnection(NingClientConfig config,
             ObjectMapper objectMapper,
-            ConsumerKey consumerAuth, AuthEntry userAuth,
+            ConsumerKey consumerAuth, RequestToken userAuth,
             NingHttpClient httpClient,
             String xapiPrefixRegular, String xapiPrefixSecure)
     {

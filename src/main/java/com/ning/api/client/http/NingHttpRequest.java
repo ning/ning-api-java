@@ -11,10 +11,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.ning.http.client.Response;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.util.Base64;
+import com.ning.http.util.UTF8UrlEncoder;
+//import com.ning.api.client.auth.UTF8UrlCodec;
 
 import com.ning.api.client.NingClientException;
 import com.ning.api.client.auth.UTF8Codec;
-import com.ning.api.client.auth.UTF8UrlCodec;
 import com.ning.api.client.exception.NingInterruptionException;
 import com.ning.api.client.exception.NingProcessingException;
 import com.ning.api.client.exception.NingTimeoutException;
@@ -51,7 +52,6 @@ public class NingHttpRequest<T extends NingHttpRequest<T>>
     protected final static ObjectMapper objectMapper = new ExtendedObjectMapper();
     
     private final static UTF8Codec utf8Codec = new UTF8Codec();
-    private final static UTF8UrlCodec urlEncoder = new UTF8UrlCodec();
 
     protected BoundRequestBuilder requestBuilder;
     
@@ -191,9 +191,9 @@ public class NingHttpRequest<T extends NingHttpRequest<T>>
         } else {
             result.append('&');
         }
-        urlEncoder.appendEncoded(result, key);
+        UTF8UrlEncoder.appendEncoded(result, key);
         result.append('=');
-        urlEncoder.appendEncoded(result, value);
+        UTF8UrlEncoder.appendEncoded(result, value);
         return result;
     }
 
