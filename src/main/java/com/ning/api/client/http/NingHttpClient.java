@@ -1,41 +1,18 @@
 package com.ning.api.client.http;
 
-import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.SignatureCalculator;
 
 /**
- * Wrapper around {@link AsyncHttpClient}, to add more convenience method for
+ * Wrapper around {@link AsyncClientImpl}, to add more convenience method for
  * constructing messages
  */
-public class NingHttpClient
+public abstract class NingHttpClient
 {
-    private final AsyncHttpClient httpClient;
-
-    public NingHttpClient() {
-        this(null);
-    }
-
-    public NingHttpClient(SignatureCalculator sig)
-    {
-        httpClient = new AsyncHttpClient();
-        if (sig != null) {
-            httpClient.setSignatureCalculator(sig);
-        }
-    }
-
-    public NingHttpDelete prepareDelete(String url, SignatureCalculator sig) {
-        return new NingHttpDelete(httpClient.prepareDelete(url).setSignatureCalculator(sig));
-    }
+    public abstract NingHttpDelete prepareDelete(String url, SignatureCalculator sig);
     
-    public NingHttpGet prepareGet(String url, SignatureCalculator sig) {
-        return new NingHttpGet(httpClient.prepareGet(url).setSignatureCalculator(sig));
-    }
+    public abstract NingHttpGet prepareGet(String url, SignatureCalculator sig);
     
-    public NingHttpPost preparePost(String url, SignatureCalculator sig) {
-        return new NingHttpPost(httpClient.preparePost(url).setSignatureCalculator(sig));
-    }
+    public abstract NingHttpPost preparePost(String url, SignatureCalculator sig);
 
-    public NingHttpPut preparePut(String url, SignatureCalculator sig) {
-        return new NingHttpPut(httpClient.preparePut(url).setSignatureCalculator(sig));
-    }
+    public abstract NingHttpPut preparePut(String url, SignatureCalculator sig);
 }

@@ -8,8 +8,6 @@ import java.util.concurrent.TimeoutException;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.ning.http.client.Response;
-import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.util.Base64;
 import com.ning.http.util.UTF8UrlEncoder;
 //import com.ning.api.client.auth.UTF8UrlCodec;
@@ -47,13 +45,16 @@ public class NingHttpRequest<T extends NingHttpRequest<T>>
     
     public final static String CONTENT_TYPE_FORM_URL_ENCODED = "application/x-www-form-urlencoded";
 
+    /**    
+     * Underlying request builder that we use
+     */
+    protected NingRequestBuilder<?> requestBuilder;
+
     // Helper objects we need
 
     protected final static ObjectMapper objectMapper = new ExtendedObjectMapper();
     
     private final static UTF8Codec utf8Codec = new UTF8Codec();
-
-    protected BoundRequestBuilder requestBuilder;
     
     // // // Certain types we will only add at the end
     
@@ -61,7 +62,7 @@ public class NingHttpRequest<T extends NingHttpRequest<T>>
     
     protected String contentEncoding;
 
-    protected NingHttpRequest(BoundRequestBuilder requestBuilder)
+    protected NingHttpRequest(NingRequestBuilder<?> requestBuilder)
     {
         this.requestBuilder = requestBuilder;
     }
@@ -80,15 +81,15 @@ public class NingHttpRequest<T extends NingHttpRequest<T>>
     public NingHttpResponse execute(long timeoutMsecs) throws NingClientException
     {
         completeRequestBeforeExecute();
-        Future<Response> future;
+        Future<NingHttpResponse> future;
         try {
-            future = requestBuilder.execute();
+            future = requestBuilder.sendRequest(objectMapper);
         } catch (IOException e) {
             return handleAsNingException(e);
         }
 
         try {
-            return new NingHttpResponse(objectMapper, future.get(timeoutMsecs, TimeUnit.MILLISECONDS));
+            return future.get(timeoutMsecs, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             throw new NingInterruptionException(e);
         } catch (ExecutionException e) {
@@ -100,13 +101,14 @@ public class NingHttpRequest<T extends NingHttpRequest<T>>
     
     protected void completeRequestBeforeExecute()
     {
-        BoundRequestBuilder rb = requestBuilder;
+        NingRequestBuilder<?> rb = requestBuilder;
         if (contentType != null) {
             rb = rb.addHeader(HEADER_CONTENT_TYPE, contentType);
         }
         if (contentEncoding != null) {
             rb = rb.addHeader(HEADER_CONTENT_ENCODING, contentEncoding);
         }
+        requestBuilder = rb;
     }
     
     /*

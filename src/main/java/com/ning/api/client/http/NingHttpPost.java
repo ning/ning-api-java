@@ -1,14 +1,11 @@
 package com.ning.api.client.http;
 
-//import com.ning.api.client.auth.OAuthSignatureCalculator;
-import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
-
 public class NingHttpPost
     extends NingHttpRequestWithBody<NingHttpPost>
 {
-    public NingHttpPost(BoundRequestBuilder rawRequest) //, OAuthSignatureCalculator sig)
+    public NingHttpPost(NingRequestBuilder<?> requestBuilder)
     {
-        super(rawRequest); //, sig);
+        super(requestBuilder);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.ning.api.client.http;
 
-import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
-
 /**
  * Intermediate base class for PUT and POST methods
  */
@@ -10,9 +8,9 @@ public class NingHttpRequestWithBody<T extends NingHttpRequest<T>>
 {
     protected String explicitBody;
     
-    protected NingHttpRequestWithBody(BoundRequestBuilder rawRequest)
+    protected NingHttpRequestWithBody(NingRequestBuilder<?> requestBuilder)
     {
-        super(rawRequest);
+        super(requestBuilder);
     }
 
     /*
@@ -43,7 +41,7 @@ public class NingHttpRequestWithBody<T extends NingHttpRequest<T>>
 
     public T addFormParameter(String key, String value)
     {
-        requestBuilder = requestBuilder.addParameter(key, value);
+        requestBuilder = requestBuilder.addFormParameter(key, value);
         return _this();
     }
 

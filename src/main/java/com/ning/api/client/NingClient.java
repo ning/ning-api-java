@@ -12,6 +12,7 @@ import com.ning.api.client.http.NingHttpClient;
 import com.ning.api.client.http.NingHttpException;
 import com.ning.api.client.http.NingHttpPost;
 import com.ning.api.client.http.NingHttpResponse;
+import com.ning.api.client.http.async.AsyncClientImpl;
 import com.ning.api.client.item.Token;
 
 public class NingClient
@@ -83,16 +84,39 @@ public class NingClient
     
     public NingClient(String networkId, ConsumerKey consumerAuth)
     {
-        this(networkId, consumerAuth, null);
+        this(null, networkId, consumerAuth, null);
+    }
+
+    public NingClient(NingHttpClient httpClient,
+            String networkId, ConsumerKey consumerAuth)
+    {
+        this(httpClient, networkId, consumerAuth, null);
     }
     
     public NingClient(String networkId, ConsumerKey consumerAuth, String host)
     {
-        this(networkId, consumerAuth, host, -1, -1);
+        this(null, networkId, consumerAuth, host, -1, -1);
     }
 
+    public NingClient(NingHttpClient httpClient, String networkId, ConsumerKey consumerAuth, String host)
+    {
+        this(httpClient, networkId, consumerAuth, host, -1, -1);
+    }
+    
     public NingClient(String networkId, ConsumerKey consumerAuth, String host, int port, int securePort)
     {
+        this(null, networkId, consumerAuth, host, port, securePort);
+    }
+
+    public NingClient(NingHttpClient httpClient,
+            String networkId, ConsumerKey consumerAuth, String host, int port, int securePort)
+    {
+        // Default to using Async HTTP client
+        if (httpClient == null) {
+            httpClient = constructDefaultHttpClient();
+        }
+        this.httpClient = httpClient;
+        
         this.networkId = networkId;
         this.consumerAuth = consumerAuth;
         if (host == null) {
@@ -113,8 +137,12 @@ public class NingClient
         objectMapper = new ObjectMapper();
         // let's not barf on unrecognized fields:
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        
-        httpClient = new NingHttpClient();
+    }
+
+    /* By default (unless told otherwise) we will use Ning async http client
+     */
+    private NingHttpClient constructDefaultHttpClient() {
+        return new AsyncClientImpl();
     }
 
     /*
@@ -204,9 +232,9 @@ public class NingClient
      * specified User token, and specified configuration overrides (above
      * and beyond default client configuration settings)
      */
-    public NingConnection connect(RequestToken userAuth, NingClientConfig config)
+    public NingConnection connect(RequestToken userAuth, NingClientConfig override)
     {
-        NingClientConfig connectionConfig = config.overrideWith(config);
+        NingClientConfig connectionConfig = config.overrideWith(override);
         return new NingConnection(connectionConfig, objectMapper, consumerAuth, userAuth, httpClient,
                 xapiPrefixRegular, xapiPrefixSecure);
 

@@ -1,20 +1,15 @@
 package com.ning.api.client.http;
 
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.List;
 
-import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
 
-import com.ning.http.client.Response;
-
 import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.impl.AnchorHolder;
 import com.ning.api.client.exception.NingTransferException;
-import com.ning.api.client.exception.NingTransformException;
 import com.ning.api.client.item.ContentItem;
 import com.ning.api.client.json.ItemCountResponse;
 import com.ning.api.client.json.ItemResponse;
@@ -24,26 +19,18 @@ import com.ning.api.client.json.ItemSequenceResponse;
  * Wrapper around "raw" HTTP response object; adds convenience accesors
  * as well as basic data binding for JSON content.
  */
-public class NingHttpResponse
+public abstract class NingHttpResponse
 {
     private final int MAX_ERROR_RESP_TO_INCLUDE = 1000;
 
     /**
      * Mapper we use for binding data from responses into POJOs
      */
-    private final ObjectMapper objectMapper;
+    protected final ObjectMapper objectMapper;
     
-    /**
-     * Actual low-level response object that contains data to process.
-     */
-    private final Response rawResponse;
-
-    private String responseBody;
-    
-    public NingHttpResponse(ObjectMapper objectMapper, Response rawResponse)
+    public NingHttpResponse(ObjectMapper objectMapper)
     {
         this.objectMapper = objectMapper;
-        this.rawResponse = rawResponse;
     }
 
     /*
@@ -52,21 +39,9 @@ public class NingHttpResponse
     /////////////////////////////////////////////////////////////////////////
      */
 
-    public Response rawResponse() { return rawResponse; }
-    
-    public int getStatusCode() { return rawResponse.getStatusCode(); }
+    public abstract int getStatusCode();
 
-    public String getResponseBody() throws NingTransferException
-    {
-        if (responseBody == null) {
-            try {
-                responseBody = rawResponse.getResponseBody();
-            } catch (IOException ioe) {
-                throw new NingTransferException(ioe);
-            }
-        }
-        return responseBody;
-    }
+    public abstract String getResponseBody() throws NingTransferException;
 
     public String safeGetResponseBody() throws IOException
     {
@@ -125,8 +100,7 @@ public class NingHttpResponse
         throws NingClientException
     { 
         verifyResponse();
-        ItemResponse<T> response = readAndBind(rawResponse,
-                TypeFactory.parametricType(ItemResponse.class, itemClass));
+        ItemResponse<T> response = readAndBind(TypeFactory.parametricType(ItemResponse.class, itemClass));
         return response.getEntry();
     }
 
@@ -141,8 +115,7 @@ public class NingHttpResponse
         throws NingClientException
     {
         verifyResponse();
-        ItemSequenceResponse<T> response = readAndBind(rawResponse,
-                TypeFactory.parametricType(ItemSequenceResponse.class, itemClass));
+        ItemSequenceResponse<T> response = readAndBind(TypeFactory.parametricType(ItemSequenceResponse.class, itemClass));
         if (anchor != null) {
             anchor.setAnchor(response.getAnchor());
         }
@@ -152,25 +125,11 @@ public class NingHttpResponse
     public Integer asCount() throws NingClientException
     {
         verifyResponse();
-        ItemCountResponse response = readAndBind(rawResponse, TypeFactory.type(ItemCountResponse.class));
+        ItemCountResponse response = readAndBind(TypeFactory.type(ItemCountResponse.class));
         return response.getCount();
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T> T readAndBind(Response response, JavaType valueType)
-    {
-        verifyResponse();
-        try {
-            InputStream in = response.getResponseBodyAsStream();
-            Object ob = objectMapper.readValue(in, valueType);
-            // note: mapper by default closes underlying input stream automatically
-            return (T) ob;
-        } catch (JsonProcessingException e) {
-            throw new NingTransformException("Failed to bind JSON into type "+valueType+": "+e.getMessage(), e);
-        } catch (IOException e) {
-            throw new NingTransferException("Failed to read data (of assumed type "+valueType+"): "+e.getMessage(), e);
-        }    
-    }
+    protected abstract <T> T readAndBind(JavaType valueType);
 
     /*
     /////////////////////////////////////////////////////////////////////////
