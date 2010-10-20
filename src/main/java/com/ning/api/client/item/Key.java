@@ -12,7 +12,7 @@ public class Key<T>
     @JsonCreator // optional, would be auto-detected
     public Key(String stringValue)
     {
-        this.stringValue = (stringValue == null || stringValue.isEmpty()) ? null : stringValue;
+        this.stringValue = (stringValue == null || stringValue.length() == 0) ? null : stringValue;
     }
 
     @SuppressWarnings("unchecked")

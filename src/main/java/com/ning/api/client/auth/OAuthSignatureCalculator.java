@@ -69,7 +69,7 @@ public class OAuthSignatureCalculator
     ///////////////////////////////////////////////////////////////////////
      */
     
-    @Override
+    //@Override // 1.6
     public void calculateAndAddSignature(String baseURL, Request request, RequestBuilderBase<?> requestBuilder)
     {
         String httpMethod = request.getReqType().toString(); // POST etc
@@ -257,7 +257,7 @@ public class OAuthSignatureCalculator
         public String key() { return key; }
         public String value() { return value; }
 
-        @Override
+        //@Override
         public int compareTo(Parameter other)
         {
             int diff = key.compareTo(other.key);

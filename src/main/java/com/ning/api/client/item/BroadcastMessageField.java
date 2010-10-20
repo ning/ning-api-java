@@ -17,6 +17,6 @@ public enum BroadcastMessageField implements Typed
         this.valueType = valueType;
     }
     
-    @Override
+    //@Override
     public Class<?> type() { return valueType; }
 }

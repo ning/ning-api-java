@@ -29,7 +29,7 @@ public abstract class DefaultUpdater <C extends ContentItem<?,C>> implements Upd
         this.endpoint = endpoint;
     }
     
-    @Override
+    //@Override
     public void update() throws NingClientException
     {
         NingHttpPut put = buildUpdate();

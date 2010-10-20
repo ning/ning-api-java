@@ -187,13 +187,13 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
             this.body = body;
         }
 
-        @Override
+        //@Override
         public boolean cancel(boolean mayInterruptIfRunning) {
             // NOP
             return false;
         }
 
-        @Override
+        //@Override
         public NingHttpResponse get() throws InterruptedException, ExecutionException {
             try {
                 return completeRequest();
@@ -202,7 +202,7 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
             }
         }
 
-        @Override
+        //@Override
         public NingHttpResponse get(long timeout, TimeUnit unit)
                 throws InterruptedException, ExecutionException, TimeoutException
         {
@@ -238,12 +238,12 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
             return new JdkResponseImpl(objectMapper, connection);
         }
 
-        @Override
+        //@Override
         public boolean isCancelled() {
             return false;
         }
 
-        @Override
+        //@Override
         public boolean isDone() {
             return false;
         }

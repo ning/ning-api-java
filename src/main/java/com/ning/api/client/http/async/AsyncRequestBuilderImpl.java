@@ -68,29 +68,29 @@ public class AsyncRequestBuilderImpl extends NingRequestBuilder<AsyncRequestBuil
             this.futureImpl = futureImpl;
         }
         
-        @Override
+        //@Override
         public boolean cancel(boolean mayInterruptIfRunning) {
             return futureImpl.cancel(mayInterruptIfRunning);
         }
 
-        @Override
+        //@Override
         public NingHttpResponse get() throws InterruptedException, ExecutionException {
             return new AsyncResponseImpl(objectMapper, futureImpl.get());
         }
 
-        @Override
+        //@Override
         public NingHttpResponse get(long timeout, TimeUnit unit)
                 throws InterruptedException, ExecutionException, TimeoutException
         {
             return new AsyncResponseImpl(objectMapper, futureImpl.get(timeout, unit));
         }
 
-        @Override
+        //@Override
         public boolean isCancelled() {
             return futureImpl.isCancelled();
         }
 
-        @Override
+        //@Override
         public boolean isDone() {
             return futureImpl.isDone();
         }

@@ -40,7 +40,7 @@ public class ItemSequenceResponse<T> extends ResponseWithResources
     
     // ignore so it won't be serialized
     @JsonIgnore
-    public boolean isEmpty() { return (entry == null) || entry.isEmpty(); }
+    public boolean isEmpty() { return (entry == null) || entry.size() == 0; }
 
     @JsonIgnore
     public boolean isFirstPage() { return firstPage; }

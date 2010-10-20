@@ -72,7 +72,7 @@ public abstract class NingHttpResponse
         } catch (Exception e) {
             return "[failed to access response body, problem: "+e+"]";
         }
-        if (msg == null || msg.isEmpty()) {
+        if (msg == null || msg.length() == 0) {
             return "[no response message]";
         }
         if (msg.length() > MAX_ERROR_RESP_TO_INCLUDE) {

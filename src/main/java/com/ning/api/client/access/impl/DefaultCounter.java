@@ -58,7 +58,7 @@ public abstract class DefaultCounter
         this.isApproved = isApproved;
     }
 
-    @Override
+    //@Override
     public int count() throws NingClientException
     {
         NingHttpGet getter = buildQuery();
@@ -76,7 +76,7 @@ public abstract class DefaultCounter
         // always must use 'createdAfter' filter":
         getter = getter.addQueryParameter("createdAfter", createdAfter.toString());
         // but other pieces are optional
-        if (author != null && !author.isEmpty()) {
+        if (author != null && author.length() > 0) {
             getter = getter.addQueryParameter("author", author);
         }
         if (isPrivate != null) {

@@ -34,7 +34,7 @@ public class ItemIteratorImpl<C extends ContentItem<?, C>>
         this.itemsPerCall = itemsPerCall;
     }
     
-    @Override
+    //@Override
     public boolean hasNext()
     {
         if (closed) return false;
@@ -46,7 +46,7 @@ public class ItemIteratorImpl<C extends ContentItem<?, C>>
         return true;
     }
 
-    @Override
+    //@Override
     public C next()
     {
         if (currentItems == null || !currentItems.hasNext()) {
@@ -57,7 +57,7 @@ public class ItemIteratorImpl<C extends ContentItem<?, C>>
         return currentItems.next();
     }
 
-    @Override
+    //@Override
     public void remove() {
         throw new UnsupportedOperationException("Item lists are read-only");
     }
