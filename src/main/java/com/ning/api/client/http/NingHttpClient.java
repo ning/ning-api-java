@@ -1,6 +1,6 @@
 package com.ning.api.client.http;
 
-import com.ning.http.client.SignatureCalculator;
+import com.ning.api.client.auth.OAuthSignatureCalculator;
 
 /**
  * Wrapper around {@link AsyncClientImpl}, to add more convenience method for
@@ -8,11 +8,11 @@ import com.ning.http.client.SignatureCalculator;
  */
 public abstract class NingHttpClient
 {
-    public abstract NingHttpDelete prepareDelete(String url, SignatureCalculator sig);
+    public abstract NingHttpDelete prepareDelete(String url, OAuthSignatureCalculator sig);
     
-    public abstract NingHttpGet prepareGet(String url, SignatureCalculator sig);
+    public abstract NingHttpGet prepareGet(String url, OAuthSignatureCalculator sig);
     
-    public abstract NingHttpPost preparePost(String url, SignatureCalculator sig);
+    public abstract NingHttpPost preparePost(String url, OAuthSignatureCalculator sig);
 
-    public abstract NingHttpPut preparePut(String url, SignatureCalculator sig);
+    public abstract NingHttpPut preparePut(String url, OAuthSignatureCalculator sig);
 }

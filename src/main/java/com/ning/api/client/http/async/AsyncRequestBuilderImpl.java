@@ -16,7 +16,7 @@ import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 public class AsyncRequestBuilderImpl extends NingRequestBuilder<AsyncRequestBuilderImpl>
 {
     protected BoundRequestBuilder requestBuilder;
-
+    
     public AsyncRequestBuilderImpl(BoundRequestBuilder requestBuilder)
     {
         this.requestBuilder = requestBuilder;
@@ -37,7 +37,8 @@ public class AsyncRequestBuilderImpl extends NingRequestBuilder<AsyncRequestBuil
     }
 
     @Override
-    public Future<NingHttpResponse> sendRequest(ObjectMapper objectMapper) throws IOException
+    public Future<NingHttpResponse> sendRequest(ObjectMapper objectMapper)
+        throws IOException
     {
         return new ResponseFuture(objectMapper, requestBuilder.execute());
     }
@@ -55,8 +56,6 @@ public class AsyncRequestBuilderImpl extends NingRequestBuilder<AsyncRequestBuil
         return null;
     }
 
-    /*
-     */
     protected final static class ResponseFuture implements Future<NingHttpResponse>
     {
         protected final ObjectMapper objectMapper;

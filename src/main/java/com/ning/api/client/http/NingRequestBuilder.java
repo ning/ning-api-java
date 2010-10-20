@@ -22,7 +22,8 @@ public abstract class NingRequestBuilder<T extends NingRequestBuilder<T>>
     /**
      * Method for building and sending request built by this builder.
      */
-    public abstract Future<NingHttpResponse> sendRequest(ObjectMapper objectMapper) throws IOException;
+    public abstract Future<NingHttpResponse> sendRequest(ObjectMapper objectMapper)
+        throws IOException;
     
     // Methods for things that can have payload (POST, PUT)
 

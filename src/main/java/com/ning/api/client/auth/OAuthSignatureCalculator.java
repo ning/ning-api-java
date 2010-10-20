@@ -63,17 +63,35 @@ public class OAuthSignatureCalculator
         random = new Random(System.identityHashCode(this) + System.currentTimeMillis());
     }
 
+    /*
+    ///////////////////////////////////////////////////////////////////////
+    // Async HTTP client's SignatureCalculator impl
+    ///////////////////////////////////////////////////////////////////////
+     */
+    
     @Override
     public void calculateAndAddSignature(String baseURL, Request request, RequestBuilderBase<?> requestBuilder)
     {
-        String method = request.getReqType().toString(); // POST etc
-        String nonce = generateNonce();
-        long timestamp = System.currentTimeMillis() / 1000L;
-        String signature = calculateSignature(method, baseURL, timestamp, nonce, request.getParams(), request.getQueryParams());
-        String headerValue = constructAuthHeader(signature, nonce, timestamp);
-        requestBuilder = requestBuilder.addHeader(HEADER_AUTHORIZATION, headerValue);
+        String httpMethod = request.getReqType().toString(); // POST etc
+        String authHeaderValue = calculateAuthorizationHeader(httpMethod, baseURL, request.getParams(), request.getQueryParams());
+        requestBuilder = requestBuilder.addHeader(HEADER_AUTHORIZATION, authHeaderValue);
     }
 
+    /*
+    ///////////////////////////////////////////////////////////////////////
+    // Extended API
+    ///////////////////////////////////////////////////////////////////////
+     */
+
+    public String calculateAuthorizationHeader(String httpMethod, String baseURL,
+            FluentStringsMap formParams, FluentStringsMap queryParams)
+    {
+        String nonce = generateNonce();
+        long timestamp = generateTimestamp();
+        String signature = calculateSignature(httpMethod, baseURL, timestamp, nonce, formParams, queryParams);
+        return constructAuthHeader(signature, nonce, timestamp);
+    }
+    
     /**
      * Method for calculating OAuth signature using HMAC/SHA-1 method.
      */
@@ -143,7 +161,7 @@ public class OAuthSignatureCalculator
     }
 
     /**
-     * Method used for constructing 
+     * Method used for constructing authorization header
      */
     public String constructAuthHeader(String signature, String nonce, long oauthTimestamp)
     {
@@ -167,12 +185,22 @@ public class OAuthSignatureCalculator
         return sb.toString();
     }
 
-    private synchronized String generateNonce()
+    /*
+    ///////////////////////////////////////////////////////////////////////
+    // Internal methods
+    ///////////////////////////////////////////////////////////////////////
+     */
+    
+    protected synchronized String generateNonce()
     {
         random.nextBytes(nonceBuffer);
         // let's use base64 encoding over hex, slightly more compact than hex or decimals
         return Base64.encode(nonceBuffer);
 //      return String.valueOf(Math.abs(random.nextLong()));
+    }
+
+    protected long generateTimestamp() {
+        return System.currentTimeMillis() / 1000L;
     }
 
     /**

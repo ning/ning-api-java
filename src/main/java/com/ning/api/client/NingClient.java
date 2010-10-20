@@ -141,8 +141,9 @@ public class NingClient
 
     /* By default (unless told otherwise) we will use Ning async http client
      */
-    private NingHttpClient constructDefaultHttpClient() {
-        return new AsyncClientImpl();
+    private static NingHttpClient constructDefaultHttpClient() {
+//        return new AsyncClientImpl();
+        return new com.ning.api.client.http.jdk.JdkClientImpl();
     }
 
     /*

@@ -1,48 +1,34 @@
 package com.ning.api.client.http.jdk;
 
 import com.ning.api.client.http.NingHttpClient;
-/*
 import com.ning.api.client.http.NingHttpDelete;
 import com.ning.api.client.http.NingHttpGet;
 import com.ning.api.client.http.NingHttpPost;
 import com.ning.api.client.http.NingHttpPut;
-import com.ning.http.client.AsyncHttpClient;
-*/
-import com.ning.http.client.SignatureCalculator;
+
+import com.ning.api.client.auth.OAuthSignatureCalculator;
 
 /**
  * Implementation of {@link NingHttpClient} that uses Ning async HTTP client
  * for HTTP connectivity
  */
-public abstract class JdkClientImpl extends NingHttpClient
+public class JdkClientImpl extends NingHttpClient
 {
-    private final SignatureCalculator signatureCalculator;
+    public JdkClientImpl() { }
 
-    public JdkClientImpl() {
-        this(null);
-    }
-
-    public JdkClientImpl(SignatureCalculator sig)
-    {
-        this.signatureCalculator = sig;
-    }
-
-    /*
-    public NingHttpDelete prepareDelete(String url, SignatureCalculator sig) {
-        return new NingHttpDelete(httpClient.prepareDelete(url).setSignatureCalculator(sig));
+    public NingHttpDelete prepareDelete(String url, OAuthSignatureCalculator sig) {
+        return new NingHttpDelete(new JdkRequestBuilderImpl(url, sig, "DELETE"));
     }
     
-    public NingHttpGet prepareGet(String url, SignatureCalculator sig) {
-        return new NingHttpGet(httpClient.prepareGet(url).setSignatureCalculator(sig));
+    public NingHttpGet prepareGet(String url, OAuthSignatureCalculator sig) {
+        return new NingHttpGet(new JdkRequestBuilderImpl(url, sig, "GET"));
     }
     
-    public NingHttpPost preparePost(String url, SignatureCalculator sig) {
-        return new NingHttpPost(httpClient.preparePost(url).setSignatureCalculator(sig));
+    public NingHttpPost preparePost(String url, OAuthSignatureCalculator sig) {
+        return new NingHttpPost(new JdkRequestBuilderImpl(url, sig, "POST"));
     }
 
-    public NingHttpPut preparePut(String url, SignatureCalculator sig) {
-        return new NingHttpPut(httpClient.preparePut(url).setSignatureCalculator(sig));
+    public NingHttpPut preparePut(String url, OAuthSignatureCalculator sig) {
+        return new NingHttpPut(new JdkRequestBuilderImpl(url, sig, "PUT"));
     }
-
-*/
 }

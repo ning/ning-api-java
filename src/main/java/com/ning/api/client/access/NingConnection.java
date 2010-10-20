@@ -2,8 +2,6 @@ package com.ning.api.client.access;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.ning.http.client.SignatureCalculator;
-
 import com.ning.api.client.NingClientConfig;
 import com.ning.api.client.auth.RequestToken;
 import com.ning.api.client.auth.ConsumerKey;
@@ -24,7 +22,7 @@ public class NingConnection
 
     protected final NingHttpClient httpClient;
 
-    protected final SignatureCalculator signatureCalculator;
+    protected final OAuthSignatureCalculator signatureCalculator;
     
     /**
      * URL prefix for external API request when using non-secure end point.
