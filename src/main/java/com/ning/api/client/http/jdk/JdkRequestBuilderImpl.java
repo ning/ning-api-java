@@ -55,6 +55,7 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
         }
         headers.add(name);
         headers.add(value);
+
         return this;
     }
 
@@ -103,7 +104,7 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
         if (signatureCalculator != null) {
             String auth = signatureCalculator.calculateAuthorizationHeader(httpMethod,
                     url.toExternalForm(), formParameters, queryParameters);
-            conn.setRequestProperty(OAuthSignatureCalculator.HEADER_AUTHORIZATION, auth);
+            addHeader(OAuthSignatureCalculator.HEADER_AUTHORIZATION, auth);
         }
         
         String bodyToUse = body;
@@ -123,7 +124,6 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
             }
             bodyToUse = sb.toString();
         }
-System.err.println("URL = "+url+", body == "+bodyToUse);       
         return new RequestFuture(objectMapper, conn, headers, bodyToUse);
     }
 
@@ -224,7 +224,10 @@ System.err.println("URL = "+url+", body == "+bodyToUse);
             // Then add explicit headers (if any)
             if (headers != null) {
                 for (int i = 0, len = headers.size(); i < len; i += 2) {
-                    connection.addRequestProperty(headers.get(i), headers.get(i+1));
+                    String name = headers.get(i);
+                    String value = headers.get(i+1);
+System.out.println("Header '"+name+"', value \""+value+"\"");
+                    connection.addRequestProperty(name, value);
                 }
             }
             // Then add body, if necessary
@@ -246,6 +249,5 @@ System.err.println("URL = "+url+", body == "+bodyToUse);
         public boolean isDone() {
             return false;
         }
-    
     }        
 }
