@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.ning.http.client.FluentStringsMap;
-import com.ning.http.client.Response;
 import com.ning.http.util.UTF8UrlEncoder;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -21,7 +20,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.ning.api.client.auth.OAuthSignatureCalculator;
 import com.ning.api.client.http.NingHttpResponse;
 import com.ning.api.client.http.NingRequestBuilder;
-import com.ning.api.client.http.async.AsyncResponseImpl;
 
 public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderImpl>
 {
@@ -66,6 +64,7 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
         if (queryParameters == null) {
             queryParameters = new FluentStringsMap();
         }
+        queryParameters.add(name, value);
         return this;
     }
 
@@ -75,6 +74,7 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
         if (formParameters == null) {
             formParameters = new FluentStringsMap();
         }
+        formParameters.add(name, value);
         return this;
     }
 
@@ -123,6 +123,7 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
             }
             bodyToUse = sb.toString();
         }
+System.err.println("URL = "+url+", body == "+bodyToUse);       
         return new RequestFuture(objectMapper, conn, headers, bodyToUse);
     }
 
@@ -144,6 +145,8 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
                 for (String value : entry.getValue()) {
                     if (++count > 1) {
                         sb.append('&');
+                    } else {
+                        sb.append('?');
                     }
                     sb = UTF8UrlEncoder.appendEncoded(sb, key);
                     sb.append('=');

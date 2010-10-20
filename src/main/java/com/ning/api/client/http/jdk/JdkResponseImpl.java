@@ -1,7 +1,6 @@
 package com.ning.api.client.http.jdk;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 
 import org.codehaus.jackson.JsonProcessingException;
@@ -17,6 +16,8 @@ public class JdkResponseImpl extends NingHttpResponse
     protected final HttpURLConnection connection;
 
     protected final int responseCode;
+
+    private String responseBody;
     
     public JdkResponseImpl(ObjectMapper objectMapper, HttpURLConnection connection)
         throws IOException
@@ -28,8 +29,33 @@ public class JdkResponseImpl extends NingHttpResponse
     
     @Override
     public String getResponseBody() throws NingTransferException {
-        // TODO Auto-generated method stub
-        return null;
+        /* JDK's HttpURLConnection is a PoS, and requires separate handling
+         * for ok and error use cases... so
+         * 
+         */
+        if (responseBody == null) {
+            InputStream in = null;
+            StringBuilder sb = new StringBuilder();
+            char[] buffer = new char[1000];
+            try {
+                if (isError()) {
+                    in = connection.getErrorStream();
+                } else {
+                    in = connection.getInputStream();
+                }
+                
+                InputStreamReader r = new InputStreamReader(in, "UTF-8");
+                int count;
+                while ((count = r.read(buffer)) > 0) {
+                    sb.append(buffer, 0, count);
+                }
+                r.close();
+            } catch (IOException ioe) {
+                throw new NingTransferException(ioe);
+            }
+            responseBody = sb.toString();
+        }
+        return responseBody;
     }
 
     @Override
@@ -37,6 +63,11 @@ public class JdkResponseImpl extends NingHttpResponse
         return responseCode;
     }
 
+    protected boolean isError() {
+        int code = getStatusCode();
+        return code < 200 || code >= 300;
+    }
+    
     @SuppressWarnings("unchecked")
     @Override
     protected <T> T readAndBind(JavaType valueType)
