@@ -142,8 +142,9 @@ public class NingClient
     /* By default (unless told otherwise) we will use Ning async http client
      */
     private static NingHttpClient constructDefaultHttpClient() {
-//        return new AsyncClientImpl();
-        return new com.ning.api.client.http.jdk.JdkClientImpl();
+        return new AsyncClientImpl();
+        // 20-Oct-2010, tatu: Some platforms (read: Android) aren't ok with async-hc; can use JDK-based:
+//        return new com.ning.api.client.http.jdk.JdkClientImpl();
     }
 
     /*

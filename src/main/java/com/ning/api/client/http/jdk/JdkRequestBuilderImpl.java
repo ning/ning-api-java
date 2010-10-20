@@ -55,7 +55,6 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
         }
         headers.add(name);
         headers.add(value);
-
         return this;
     }
 
@@ -103,7 +102,7 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
         // Then calculate signature (if necessary), add as header
         if (signatureCalculator != null) {
             String auth = signatureCalculator.calculateAuthorizationHeader(httpMethod,
-                    url.toExternalForm(), formParameters, queryParameters);
+                    baseURL, formParameters, queryParameters);
             addHeader(OAuthSignatureCalculator.HEADER_AUTHORIZATION, auth);
         }
         
@@ -226,7 +225,6 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
                 for (int i = 0, len = headers.size(); i < len; i += 2) {
                     String name = headers.get(i);
                     String value = headers.get(i+1);
-System.out.println("Header '"+name+"', value \""+value+"\"");
                     connection.addRequestProperty(name, value);
                 }
             }
