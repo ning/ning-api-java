@@ -10,7 +10,7 @@ import com.ning.api.client.item.Token;
  * Temporary class to test functionality from command-line; this one constructing a
  * security token
  */
-public class ManualTestToken
+public class ManualCreateToken
 {
 	protected final static String TEST_NETWORK = "www";
 	

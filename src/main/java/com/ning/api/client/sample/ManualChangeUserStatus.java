@@ -5,7 +5,7 @@ import com.ning.api.client.access.Users;
 import com.ning.api.client.item.User;
 import com.ning.api.client.item.UserField;
 
-public class ManualTestChangeUserStatus extends SampleIntermediate
+public class ManualChangeUserStatus extends SampleIntermediate
 {
     public void doAction(NingConnection conn) throws Exception
     {
@@ -39,6 +39,6 @@ public class ManualTestChangeUserStatus extends SampleIntermediate
     }
 
     public static void main(String[] args) throws Exception {
-        new ManualTestChangeUserStatus().action();
+        new ManualChangeUserStatus().action();
     }
 }

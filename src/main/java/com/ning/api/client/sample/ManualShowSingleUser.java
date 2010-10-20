@@ -4,7 +4,7 @@ import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.item.User;
 import com.ning.api.client.item.UserField;
 
-public class ManualTestSingleUser extends SampleIntermediate
+public class ManualShowSingleUser extends SampleIntermediate
 {
     public void doAction(NingConnection conn) throws Exception
     {
@@ -21,6 +21,6 @@ public class ManualTestSingleUser extends SampleIntermediate
     }
 
     public static void main(String[] args) throws Exception {
-        new ManualTestSingleUser().action();
+        new ManualShowSingleUser().action();
     }
 }
