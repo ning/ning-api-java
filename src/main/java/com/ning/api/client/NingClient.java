@@ -24,12 +24,11 @@ public class NingClient
      */
 
     /**
-     * If not explicitly specified, we will default to using port 8080,
-     * which is 
+     * If not explicitly specified, we will default to using port 80.
      */
-    public final static int XAPI_REGULAR_PORT = 8080;
+    public final static int XAPI_REGULAR_PORT = 80;
 
-    public final static int XAPI_SECURE_PORT = 8443;
+    public final static int XAPI_SECURE_PORT = 443;
 
     public final static String DEFAULT_HOST = "external.ningapis.com";
     
