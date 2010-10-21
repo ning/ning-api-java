@@ -8,6 +8,7 @@ public class Network extends ContentItemBase<NetworkField, Network>
 {
     // Base class includes standard ones: id, author, createdDate
     
+    @JsonProperty protected String subdomain;
     @JsonProperty protected String name;
     @JsonProperty protected XapiStatus xapiStatus;
 
@@ -22,7 +23,8 @@ public class Network extends ContentItemBase<NetworkField, Network>
     @JsonProperty protected Boolean videoModeration;
 
     public Network() { }
-    
+
+    public String getSubdomain() { return subdomain; }
     public String getName() { return name; }
     public XapiStatus getXapiStatus() { return xapiStatus; }
     
