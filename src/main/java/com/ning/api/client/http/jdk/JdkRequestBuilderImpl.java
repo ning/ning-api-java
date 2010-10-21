@@ -157,7 +157,10 @@ public class JdkRequestBuilderImpl extends NingRequestBuilder<JdkRequestBuilderI
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
-            throw new IOException("Failed to construct URL from '"+url+"': "+e.getMessage(), e);
+            // Ugh: chained constructor only added in 1.6, so:
+            IOException ie = new IOException("Failed to construct URL from '"+url+"': "+e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 
