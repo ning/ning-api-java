@@ -16,7 +16,7 @@ public abstract class SampleIntermediate extends SampleBase
 
     protected SampleIntermediate(String network)
     {
-        this(DEFAULT_XAPI_HOST, 80, 443, network);
+        this(DEFAULT_XAPI_HOST, DEFAULT_HTTP_PORT, DEFAULT_HTTPS_PORT, network);
     }
 
     protected SampleIntermediate(String hostname, int httpPort, int httpsPort, String network)
@@ -29,6 +29,7 @@ public abstract class SampleIntermediate extends SampleBase
         return new ConsumerKey(TEST_CONSUMER_KEY, TEST_CONSUMER_SECRET);
     }
 
+    @Override
     public RequestToken getUserToken() {
         return new RequestToken(TEST_USER_KEY, TEST_USER_TOKEN);
     }

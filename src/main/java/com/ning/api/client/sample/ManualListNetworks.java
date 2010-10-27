@@ -1,8 +1,6 @@
 package com.ning.api.client.sample;
 
 import com.ning.api.client.access.NingConnection;
-import com.ning.api.client.auth.ConsumerKey;
-import com.ning.api.client.auth.RequestToken;
 import com.ning.api.client.item.*;
 
 public class ManualListNetworks extends SampleIntermediate
