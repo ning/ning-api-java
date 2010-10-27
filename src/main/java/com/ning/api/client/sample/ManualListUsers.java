@@ -7,8 +7,6 @@ import org.joda.time.DateTime;
 import com.ning.api.client.access.NingConnection;
 import com.ning.api.client.access.Users;
 import com.ning.api.client.action.PagedList;
-import com.ning.api.client.auth.ConsumerKey;
-import com.ning.api.client.auth.RequestToken;
 import com.ning.api.client.item.Fields;
 import com.ning.api.client.item.User;
 import com.ning.api.client.item.UserField;
@@ -33,11 +31,12 @@ public class ManualListUsers extends SampleIntermediate
                     UserField.birthDate,
                     UserField.email,
                     UserField.fullName,
-                    UserField.statusMessage
+                    UserField.statusMessage,
+                    UserField.profileQuestions
                     );
             Users.UserLister lister = conn.users().listerForRecent(fields);
             PagedList<User> list = lister.list();
-            users = list.next(5);
+            users = list.next(6);
         } catch (Exception e) {
             System.err.println("Failed, problem ("+e.getClass().getName()+") = "+e);
             e.printStackTrace();
@@ -49,7 +48,8 @@ public class ManualListUsers extends SampleIntermediate
             if (user instanceof User) {
                 User uc = (User) user;
                 System.out.println(" User(c): id="+uc.id()+", name="+uc.getFullName()+", birthDate="+uc.getBirthDate()+", email="+uc.getEmail()
-                        +", statusMessage="+uc.getStatusMessage());
+                        +", statusMessage="+uc.getStatusMessage()
+                        +", profileQuestions="+uc.getProfileQuestions());
             } else {
                 System.out.println(" User(m): id="+user.id()+", created="+user.getCreatedDate()+", author="+user.getAuthor());
             }

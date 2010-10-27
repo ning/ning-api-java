@@ -1,6 +1,7 @@
 package com.ning.api.client.item;
 
 import java.net.URI;
+import java.util.List;
 
 import org.joda.time.ReadableDateTime;
 
@@ -41,6 +42,7 @@ public enum UserField implements Typed
     isMember(Boolean.class),
     isBlocked(Boolean.class),
     location(String.class),
+    profileQuestions(List.class) // how to pass generic type info?
     ;
 
     private final String external;

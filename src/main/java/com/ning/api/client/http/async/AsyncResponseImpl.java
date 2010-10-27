@@ -28,7 +28,9 @@ public class AsyncResponseImpl extends NingHttpResponse
     }
 
     @Override
-    public int getStatusCode() { return rawResponse.getStatusCode(); }
+    public int getStatusCode() {
+        return (rawResponse == null) ? 0 : rawResponse.getStatusCode();
+    }
 
     @Override
     public String getResponseBody() throws NingTransferException

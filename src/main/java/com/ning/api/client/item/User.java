@@ -1,6 +1,7 @@
 package com.ning.api.client.item;
 
 import java.net.URI;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -37,6 +38,8 @@ public class User
     @JsonProperty protected Boolean isMember;
     @JsonProperty protected Boolean isOwner;
     @JsonProperty protected String location;
+
+    @JsonProperty protected List<ProfileQuestion> profileQuestions;
     
     public User() { this((String) null); }
     public User(String id) { this(new Key<User>(id)); }
@@ -86,4 +89,6 @@ public class User
     public Boolean isOwner() { return isOwner; }
     
     public String getLocation() { return location; }
+
+    public List<ProfileQuestion> getProfileQuestions() { return profileQuestions; }
 }
