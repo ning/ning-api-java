@@ -11,7 +11,7 @@
     <groupId>com.ning</groupId>
     <artifactId>ning-api-java</artifactId>
     <packaging>bundle</packaging>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
     <name>ning-api-java</name>
   <description>Java client library for accessing Ning external API
 </description>
