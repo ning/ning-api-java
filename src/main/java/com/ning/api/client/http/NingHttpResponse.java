@@ -11,7 +11,6 @@ import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.impl.AnchorHolder;
 import com.ning.api.client.exception.NingTransferException;
 import com.ning.api.client.item.ContentItem;
-import com.ning.api.client.item.ContentItemBase;
 import com.ning.api.client.item.SubResources;
 import com.ning.api.client.json.ItemCountResponse;
 import com.ning.api.client.json.ItemResponse;
@@ -143,9 +142,10 @@ public abstract class NingHttpResponse
 
     protected final <T> T readAndBind(JavaType valueType)
     {
-        T result = doReadAndBind(objectMapper, valueType);
+        // for some reason, JDK 1.6 (or is it 1.5?) has issues if we claim result is of type T here:
+        Object result = doReadAndBind(objectMapper, valueType);
         // nothing to do here for now... kept as is, in case there will be:
-        return result;
+        return (T) result;
     }
 
     /**
