@@ -90,4 +90,5 @@ public class BlogPost
     public String getEmail() { return email; }
     public List<String> getTags() { return tags; }
     public URI getUrl() { return url; }
+
 }

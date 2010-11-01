@@ -11,6 +11,8 @@ import com.ning.api.client.NingClientException;
 import com.ning.api.client.access.impl.AnchorHolder;
 import com.ning.api.client.exception.NingTransferException;
 import com.ning.api.client.item.ContentItem;
+import com.ning.api.client.item.ContentItemBase;
+import com.ning.api.client.item.SubResources;
 import com.ning.api.client.json.ItemCountResponse;
 import com.ning.api.client.json.ItemResponse;
 import com.ning.api.client.json.ItemSequenceResponse;
@@ -34,9 +36,9 @@ public abstract class NingHttpResponse
     }
 
     /*
-    /////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     // Simple accessors
-    /////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
      */
 
     public abstract int getStatusCode();
@@ -84,9 +86,9 @@ public abstract class NingHttpResponse
 
     
     /*
-    /////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     // Response data binding
-    /////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
      */
     
     /**
@@ -101,7 +103,12 @@ public abstract class NingHttpResponse
     { 
         verifyResponse();
         ItemResponse<T> response = readAndBind(TypeFactory.parametricType(ItemResponse.class, itemClass));
-        return response.getEntry();
+        T item = response.getEntry();
+        if (item instanceof ContentItem<?,?>) {
+            ContentItem<?,?> contentItem = (ContentItem<?,?>) item;
+            contentItem.injectSubResources(new SubResources(objectMapper, response.getResources()));
+        }
+        return item;
     }
 
     /**
@@ -119,7 +126,12 @@ public abstract class NingHttpResponse
         if (anchor != null) {
             anchor.setAnchor(response.getAnchor());
         }
-        return response.getEntry();
+        List<T> items = response.getEntry();
+        SubResources sr = new SubResources(objectMapper, response.getResources());
+        for (T item : items) {
+            item.injectSubResources(sr);
+        }
+        return items;
     }
 
     public Integer asCount() throws NingClientException
@@ -129,12 +141,23 @@ public abstract class NingHttpResponse
         return response.getCount();
     }
 
-    protected abstract <T> T readAndBind(JavaType valueType);
+    protected final <T> T readAndBind(JavaType valueType)
+    {
+        T result = doReadAndBind(objectMapper, valueType);
+        // nothing to do here for now... kept as is, in case there will be:
+        return result;
+    }
 
+    /**
+     * @param mapper Object mapper to use for data binding
+     * @param valueType Expected type of result
+     */
+    protected abstract <T> T doReadAndBind(ObjectMapper mapper, JavaType valueType);
+    
     /*
-    /////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
     // Basic validation of response
-    /////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
      */
 
     /**

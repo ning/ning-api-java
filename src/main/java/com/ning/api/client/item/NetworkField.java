@@ -24,15 +24,28 @@ public enum NetworkField  implements Typed
     userModeration(Boolean.class),
     videoModeration(Boolean.class),
 
-    // sub-properties?
-    //   author.xxx, image.xxx
+    // // Sub-resources -- not super elegant, but has to do for now
+    author_fullName(String.class, "author.fullName"),
+    author_url(String.class, "author.url"),
+    author_iconUrl(String.class, "author.iconUrl"),
     ;
 
     private final Class<?> valueType;
+    private final String external;
     
-    private NetworkField(Class<?> valueType) {
-        this.valueType = valueType;
+    private NetworkField(Class<?> type) {
+        this(type, null);
+    }
+
+    private NetworkField(Class<?> type, String external)
+    {
+        this.valueType = type;
+        this.external = external;
     }
 
     public Class<?> type() { return valueType; }
+
+    @Override public String toString() {
+        return (external == null) ? name() : external;
+    }
 }

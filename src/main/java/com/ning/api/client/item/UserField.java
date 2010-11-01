@@ -42,7 +42,13 @@ public enum UserField implements Typed
     isMember(Boolean.class),
     isBlocked(Boolean.class),
     location(String.class),
-    profileQuestions(List.class) // how to pass generic type info?
+    profileQuestions(List.class), // how to pass generic type info?
+
+    // // Sub-resources -- not super elegant, but has to do for now
+    author_fullName(String.class, "author.fullName"),
+    author_url(String.class, "author.url"),
+    author_iconUrl(String.class, "author.iconUrl"),
+    
     ;
 
     private final String external;

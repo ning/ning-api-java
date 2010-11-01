@@ -46,12 +46,12 @@ public class AsyncResponseImpl extends NingHttpResponse
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> T readAndBind(JavaType valueType)
+    protected <T> T doReadAndBind(ObjectMapper mapper, JavaType valueType)
     {
         verifyResponse();
         try {
             InputStream in = rawResponse.getResponseBodyAsStream();
-            Object ob = objectMapper.readValue(in, valueType);
+            Object ob = mapper.readValue(in, valueType);
             // note: mapper by default closes underlying input stream automatically
             return (T) ob;
         } catch (JsonProcessingException e) {

@@ -27,6 +27,8 @@ public class Photo
     @JsonProperty protected URI url;
     @JsonProperty protected Integer commentCount;
     @JsonProperty protected List<String> tags;
+
+    @JsonProperty protected String image;
     
     public Photo() { this(null); }
     public Photo(Key<Photo> id) { this.id = id; }
@@ -63,4 +65,23 @@ public class Photo
     public URI getUrl() { return url; }
     public Integer getCommentCount() { return commentCount; }
     public List<String> getTags() { return tags; }
+
+    /*
+    ///////////////////////////////////////////////////////////////////////
+    // Accessors, sub-resources (other than Author)
+    ///////////////////////////////////////////////////////////////////////
+     */
+    
+    /**
+     * Method for getting Image object that represents image item that this
+     * activity is associated with, if any (only some activity types do).
+     */
+    public Image getImageResource()
+    {
+        if (image == null) {
+            return null;
+        }
+        return stdGetImageResource(image);
+    }
+
 }

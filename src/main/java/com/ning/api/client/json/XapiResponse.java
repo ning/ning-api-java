@@ -1,6 +1,7 @@
 package com.ning.api.client.json;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Base class for all response types: the only commonality is the

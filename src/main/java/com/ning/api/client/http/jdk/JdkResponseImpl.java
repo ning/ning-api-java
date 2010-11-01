@@ -31,7 +31,6 @@ public class JdkResponseImpl extends NingHttpResponse
     public String getResponseBody() throws NingTransferException {
         /* JDK's HttpURLConnection is a PoS, and requires separate handling
          * for ok and error use cases... so
-         * 
          */
         if (responseBody == null) {
             InputStream in = null;
@@ -40,8 +39,15 @@ public class JdkResponseImpl extends NingHttpResponse
             try {
                 if (isError()) {
                     in = connection.getErrorStream();
+                    if (in == null) {
+                        throw new IllegalStateException("Unable to access error stream for HTTP error code "+getStatusCode());
+                    }
                 } else {
                     in = connection.getInputStream();
+                    if (in == null) {
+                        throw new IllegalStateException("Unable to access input stream for supposedly successful reponse (code "
+                                +getStatusCode()+")");
+                    }
                 }
                 
                 InputStreamReader r = new InputStreamReader(in, "UTF-8");
@@ -70,12 +76,12 @@ public class JdkResponseImpl extends NingHttpResponse
     
     @SuppressWarnings("unchecked")
     @Override
-    protected <T> T readAndBind(JavaType valueType)
+    protected <T> T doReadAndBind(ObjectMapper mapper, JavaType valueType)
     {
         verifyResponse();
         try {
             InputStream in = connection.getInputStream();
-            Object ob = objectMapper.readValue(in, valueType);
+            Object ob = mapper.readValue(in, valueType);
             // note: mapper by default closes underlying input stream automatically
             return (T) ob;
         } catch (JsonProcessingException e) {

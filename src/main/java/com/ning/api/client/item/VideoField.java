@@ -13,15 +13,29 @@ public enum VideoField implements Typed
     description(String.class),
     title(String.class),
     
-    // And then the rest
+    // // Sub-resources -- not super elegant, but has to do for now
+    author_fullName(String.class, "author.fullName"),
+    author_url(String.class, "author.url"),
+    author_iconUrl(String.class, "author.iconUrl")
     
     ;
 
-    private final Class<?> type;
+    private final Class<?> valueType;
+    private final String external;
     
     private VideoField(Class<?> type) {
-        this.type = type;
+        this(type, null);
     }
 
-    public Class<?> type() { return type; }
+    private VideoField(Class<?> type, String external)
+    {
+        this.valueType = type;
+        this.external = external;
+    }
+
+    public Class<?> type() { return valueType; }
+
+    @Override public String toString() {
+        return (external == null) ? name() : external;
+    }
 }

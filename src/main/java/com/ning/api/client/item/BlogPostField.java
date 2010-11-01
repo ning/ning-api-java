@@ -33,13 +33,30 @@ public enum BlogPostField implements Typed
     tags(List.class),
     birthDate(ReadableDateTime.class),
     email(String.class),
+
+    // // Sub-resources -- not super elegant, but has to do for now
+    author_fullName(String.class, "author.fullName"),
+    author_url(String.class, "author.url"),
+    author_iconUrl(String.class, "author.iconUrl"),
+    
     ;
 
     private final Class<?> valueType;
+    private final String external;
     
     private BlogPostField(Class<?> type) {
+        this(type, null);
+    }
+
+    private BlogPostField(Class<?> type, String external)
+    {
         this.valueType = type;
+        this.external = external;
     }
 
     public Class<?> type() { return valueType; }
+
+    @Override public String toString() {
+        return (external == null) ? name() : external;
+    }
 }

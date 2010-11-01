@@ -16,7 +16,12 @@ public class ManualIterateActivities extends SampleIntermediate
         
         List<Activity> acts = null;
         Activities.Lister lister = a.listerForRecent(ActivityField.title, ActivityField.type,
-                ActivityField.author);
+                ActivityField.author,
+                ActivityField.attachedTo,
+                ActivityField.attachedToAuthor,
+                ActivityField.attachedToAuthor_fullName,
+                ActivityField.image_url
+                );
         PagedList<Activity> list = lister.list();
         System.out.println("First, iterate over list in chunks of 3");
         do {
@@ -32,7 +37,20 @@ public class ManualIterateActivities extends SampleIntermediate
 
     static String toString(Activity act)
     {
-        return "activity of type "+act.getType()+", title '"+act.getTitle()+"', author: "+act.getAuthor();
+        String base = "activity of type "+act.getType()+", title '"+act.getTitle()+"', author: "+act.getAuthor();
+        Author auth = act.getAttachedToAuthorResource();
+        if (auth == null) {
+            base += ", author info UNKNOWN";
+        } else {
+            base += ", author name: "+auth.getFullName();
+        }
+        Image image = act.getImageResource();
+        if (image == null) {
+            base += ", NO image";
+        } else {
+            base += ", image url: "+image.getUrl();
+        }
+        return base;
     }
 
     public static void main(String[] args) throws Exception {

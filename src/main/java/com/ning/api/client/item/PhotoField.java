@@ -23,17 +23,33 @@ public enum PhotoField implements Typed
     url(URI.class),
     commentCount(Integer.class),
     tags(List.class),
-
-    // Sub-resources? author.xxx, image.xxx
     
+    // // Sub-resources -- not super elegant, but has to do for now
+    author_fullName(String.class, "author.fullName"),
+    author_url(String.class, "author.url"),
+    author_iconUrl(String.class, "author.iconUrl"),
+
+    image_url(String.class, "image.url"),
+    image_width(Double.class, "image.width"),
+    image_height(Double.class, "image.height"),
     ;
 
     private final Class<?> valueType;
+    private final String external;
     
-    private PhotoField(Class<?> valueType) {
-        this.valueType = valueType;
+    private PhotoField(Class<?> type) {
+        this(type, null);
+    }
+
+    private PhotoField(Class<?> type, String external)
+    {
+        this.valueType = type;
+        this.external = external;
     }
 
     public Class<?> type() { return valueType; }
 
+    @Override public String toString() {
+        return (external == null) ? name() : external;
+    }
 }
