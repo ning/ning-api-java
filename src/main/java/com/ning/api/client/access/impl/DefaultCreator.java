@@ -39,7 +39,7 @@ public abstract class DefaultCreator<C extends ContentItem<?,C>> implements Crea
 
     protected NingHttpPost buildCreate()
     {
-        NingHttpPost creator = connection.prepareHttpPost(endpoint);
+        NingHttpPost creator = connection.prepareHttpPost(endpoint, config);
         creator = creator.addAccept("*/*");
         creator = addCreateParameters(creator);
         return creator;

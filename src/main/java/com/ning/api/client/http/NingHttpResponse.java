@@ -140,6 +140,7 @@ public abstract class NingHttpResponse
         return response.getCount();
     }
 
+    @SuppressWarnings("unchecked")
     protected final <T> T readAndBind(JavaType valueType)
     {
         // for some reason, JDK 1.6 (or is it 1.5?) has issues if we claim result is of type T here:

@@ -19,7 +19,7 @@ import com.ning.api.client.item.*;
 
 /**
  * Helper class that encapsulates subset of API used for accessing
- * User ({@link User}, {@link UserMinimal}) content items.
+ * User ({@link User} content items.
  */
 public class Users extends Items<User, UserField>
 {

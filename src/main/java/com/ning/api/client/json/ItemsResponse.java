@@ -2,7 +2,6 @@ package com.ning.api.client.json;
 
 import java.util.*;
 
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 

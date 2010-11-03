@@ -71,7 +71,7 @@ public abstract class DefaultCounter
     
     protected NingHttpGet buildQuery()
     {
-        NingHttpGet getter = connection.prepareHttpGet(endpoint);
+        NingHttpGet getter = connection.prepareHttpGet(endpoint, config);
         getter = getter.addAccept("*/*");
         // always must use 'createdAfter' filter":
         getter = getter.addQueryParameter("createdAfter", createdAfter.toString());

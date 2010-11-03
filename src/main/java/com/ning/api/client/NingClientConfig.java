@@ -28,12 +28,18 @@ public class NingClientConfig
     protected final static int DEFAULT_WRITE_TIMEOUT_MSECS = 5000;
 
     /**
+     * Default settings are such that https (ssl) is <b>not</b> used.
+     */
+    protected final static boolean DEFAULT_USE_HTTPS = Boolean.FALSE;
+    
+    /**
      * Instance that is fully populated with default settings; usually used as
      * the default value for client.
      */
     private final static NingClientConfig DEFAULT_SETTINGS = new NingClientConfig(
             DEFAULT_READ_TIMEOUT_MSECS,
-            DEFAULT_WRITE_TIMEOUT_MSECS
+            DEFAULT_WRITE_TIMEOUT_MSECS,
+            DEFAULT_USE_HTTPS
             );
     
     /**
@@ -46,22 +52,37 @@ public class NingClientConfig
      */
     protected Integer writeTimeoutMsecs;
 
+    /**
+     * Flag that indicates whether ssl (https) is to be used for URL connections
+     * or not.
+     * Default setting is 'false' to indicate that regular non-ssl HTTP connections
+     * are used (along with HMAC-SHA1 signatures)
+     */
+    protected Boolean useSecureConnection;
+    
     /*
     ///////////////////////////////////////////////////////////////////////
     // Construction
     ///////////////////////////////////////////////////////////////////////
      */
-    
+
+    /**
+     * Default constructor; creates an "empty" configuration (one with no values
+     * defined), useful as baseline for instance that only overrides specific
+     * values.
+     */
     public NingClientConfig() {
-        this(DEFAULT_READ_TIMEOUT_MSECS, DEFAULT_WRITE_TIMEOUT_MSECS);
+        this(null, null, null);
     }
 
-    public NingClientConfig(Integer readTimeoutMsecs, Integer writeTimeoutMsecs)
+    public NingClientConfig(Integer readTimeoutMsecs, Integer writeTimeoutMsecs,
+            Boolean useHttps)
     {
         this.readTimeoutMsecs = readTimeoutMsecs;
         this.writeTimeoutMsecs = writeTimeoutMsecs;
+        this.useSecureConnection = useHttps;
     }
-
+    
     /*
     ///////////////////////////////////////////////////////////////////////
     // Factory methods
@@ -69,13 +90,39 @@ public class NingClientConfig
      */
 
     public NingClientConfig withReadTimeoutMsecs(Integer value) {
-        return new NingClientConfig(value, writeTimeoutMsecs);
+        return new NingClientConfig(value, writeTimeoutMsecs, useSecureConnection);
     }
 
     public NingClientConfig withWriteTimeoutMsecs(Integer value) {
-        return new NingClientConfig(readTimeoutMsecs, value);
+        return new NingClientConfig(readTimeoutMsecs, value, useSecureConnection);
     }
 
+    /**
+     * Method that will construct a configuration instance that indicates that
+     * secure (https) connections are to be used when connecting.
+     */
+    public NingClientConfig withSecureConnection() {
+        return new NingClientConfig(readTimeoutMsecs, writeTimeoutMsecs, Boolean.TRUE);
+    }
+
+    /**
+     * Method that will construct a configuration instance that indicates that
+     * secure (https) connections are <b>not</b> to be used when connecting;
+     * regular http connections are used instead.
+     */
+    public NingClientConfig withNonSecureConnection() {
+        return new NingClientConfig(readTimeoutMsecs, writeTimeoutMsecs, Boolean.TRUE);
+    }
+
+    /**
+     * Method that will construct a configuration instance that indicates that
+     * choice of secure or non-secure connection can be done using defaults (this
+     * config instance does not define any preference)
+     */
+    public NingClientConfig withAnyConnection() {
+        return new NingClientConfig(readTimeoutMsecs, writeTimeoutMsecs, null);
+    }
+    
     /**
      * Accessor for getting an instance with fully filled-out default settings.
      * This is useful as the ultimate default settings.
@@ -100,7 +147,8 @@ public class NingClientConfig
         }
         Integer readTimeout = choose(getReadTimeoutMsecs(), overrides.getReadTimeoutMsecs());
         Integer writeTimeout = choose(getWriteTimeoutMsecs(), overrides.getWriteTimeoutMsecs());
-        return new NingClientConfig(readTimeout, writeTimeout);
+        Boolean useSecure = choose(getUseSecureConnection(), overrides.getUseSecureConnection());
+        return new NingClientConfig(readTimeout, writeTimeout, useSecure);
     }
     
     /*
@@ -109,9 +157,11 @@ public class NingClientConfig
     ///////////////////////////////////////////////////////////////////////
      */
 
-    public int getReadTimeoutMsecs() { return readTimeoutMsecs; }
-    public int getWriteTimeoutMsecs() { return writeTimeoutMsecs; }
+    public Integer getReadTimeoutMsecs() { return readTimeoutMsecs; }
+    public Integer getWriteTimeoutMsecs() { return writeTimeoutMsecs; }
 
+    public Boolean getUseSecureConnection() { return useSecureConnection; }
+    
     /*
     ///////////////////////////////////////////////////////////////////////
     // Helper methods

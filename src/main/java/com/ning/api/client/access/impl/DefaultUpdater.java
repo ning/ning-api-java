@@ -39,7 +39,7 @@ public abstract class DefaultUpdater <C extends ContentItem<?,C>> implements Upd
 
     protected NingHttpPut buildUpdate()
     {
-        NingHttpPut putter = connection.prepareHttpPut(endpoint);
+        NingHttpPut putter = connection.prepareHttpPut(endpoint, config);
         putter = putter.addAccept("*/*");
         putter = addUpdateParameters(putter);
         return putter;

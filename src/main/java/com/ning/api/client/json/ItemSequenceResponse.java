@@ -1,10 +1,8 @@
 package com.ning.api.client.json;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 

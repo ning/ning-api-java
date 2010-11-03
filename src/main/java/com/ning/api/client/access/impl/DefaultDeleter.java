@@ -48,7 +48,7 @@ public class DefaultDeleter<C extends ContentItem<?,C>>
 
     protected NingHttpDelete buildRequest(Key<C> id)
     {
-        NingHttpDelete deleter = connection.prepareHttpDelete(endpoint);
+        NingHttpDelete deleter = connection.prepareHttpDelete(endpoint, config);
         deleter = deleter.addAccept("*/*");
         deleter = deleter.addQueryParameter("id", id.toString());
         return deleter;

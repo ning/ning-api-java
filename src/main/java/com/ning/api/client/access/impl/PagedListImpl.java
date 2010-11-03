@@ -82,7 +82,7 @@ public class PagedListImpl <C extends ContentItem<F, C>,
     protected List<C> fetchSequence(int count)
         throws NingClientException
     {
-        NingHttpGet getter = connection.prepareHttpGet(endpoint);
+        NingHttpGet getter = connection.prepareHttpGet(endpoint, config);
         getter = getter.addAccept("*/*");
         getter = getter.addQueryParameter("count", String.valueOf(count));
         // also, need to specify fields to include with "fields"

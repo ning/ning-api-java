@@ -15,6 +15,14 @@ import com.ning.api.client.http.NingHttpResponse;
 import com.ning.api.client.http.async.AsyncClientImpl;
 import com.ning.api.client.item.Token;
 
+/**
+ * "Root" object that is used for basic configuration, creation of user tokens,
+ * and for creating {@link NingConnection} instances used for content access.
+ *<p>
+ * Connection instances are immutable so they can be shared between threads; new instances
+ * (with alternate configuration) can be constructed using {@link #configuredClient}
+ * method.
+ */
 public class NingClient
 {
     /*
@@ -42,7 +50,7 @@ public class NingClient
     /////////////////////////////////////////////////////////////////////////
      */
 
-    protected NingClientConfig config = NingClientConfig.defaults();
+    protected final NingClientConfig config;
     
     /**
      * Network identifier of Ning network to connect to.
@@ -110,7 +118,9 @@ public class NingClient
     public NingClient(NingHttpClient httpClient,
             String networkId, ConsumerKey consumerAuth, String host, int port, int securePort)
     {
-        // Default to using Async HTTP client
+        config = NingClientConfig.defaults();
+
+            // Default to using Async HTTP client
         if (httpClient == null) {
             httpClient = constructDefaultHttpClient();
         }
@@ -138,6 +148,22 @@ public class NingClient
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    /**
+     * Internal "copy constructor" used to create an instance with different
+     * configuration
+     */
+    protected NingClient(NingClient baseline, NingClientConfig configOverrides)
+    {
+        // note: we will merge settings, to ensure there are defaults of some kind
+        this.config = baseline.config.overrideWith(configOverrides);
+        this.networkId = baseline.networkId;
+        this.consumerAuth = baseline.consumerAuth;
+        this.httpClient = baseline.httpClient;
+        this.xapiPrefixRegular = baseline.xapiPrefixRegular;
+        this.xapiPrefixSecure = baseline.xapiPrefixSecure;
+        this.objectMapper = baseline.objectMapper;
+    }
+    
     /* By default (unless told otherwise) we will use Ning async http client
      */
     private static NingHttpClient constructDefaultHttpClient() {
@@ -146,6 +172,15 @@ public class NingClient
 //        return new com.ning.api.client.http.jdk.JdkClientImpl();
     }
 
+    /**
+     * Method for creating a new client object that uses configuration overrides
+     * passed in. Note that this client is not changed in any way; only the new
+     * instance has altered configuration.
+     */
+    public NingClient configuredClient(NingClientConfig configOverrides) {
+        return new NingClient(this, configOverrides);
+    }
+    
     /*
     ///////////////////////////////////////////////////////////////////////
     // Public API, configuration
@@ -154,17 +189,6 @@ public class NingClient
 
     public NingClientConfig getConfig() { return config; }
 
-    /**
-     * Method for overriding configuration of this client instance with
-     * specified overrides. Resulting configuration will be used as the
-     * default configuration for connections created by this client (as well
-     * as for operations it directly does).
-     */
-    public void overrideConfig(NingClientConfig configOverrides) {
-        // note: we will merge settings, to ensure there are defaults of some kind
-        this.config = config.overrideWith(configOverrides);
-    }
-    
     /*
     ///////////////////////////////////////////////////////////////////////
     // Public API, token creation
