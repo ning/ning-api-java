@@ -16,6 +16,10 @@ public class JdkClientImpl extends NingHttpClient
 {
     public JdkClientImpl() { }
 
+    public void close() {
+        // anything we could do here? Probably not...
+    }
+    
     public NingHttpDelete prepareDelete(String url, OAuthSignatureCalculator sig) {
         return new NingHttpDelete(new JdkRequestBuilderImpl(url, sig, "DELETE"));
     }

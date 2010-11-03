@@ -29,6 +29,10 @@ public class AsyncClientImpl extends NingHttpClient
         }
     }
 
+    public void close() {
+        httpClient.close();
+    }
+    
     public NingHttpDelete prepareDelete(String url, OAuthSignatureCalculator sig) {
         return new NingHttpDelete(new AsyncRequestBuilderImpl(httpClient.prepareDelete(url).setSignatureCalculator(sig)));
     }

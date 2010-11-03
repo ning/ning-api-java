@@ -246,12 +246,24 @@ public class NingClient
     /**
      * Method for creating {@link NingConnection} to access resources using
      * specified User token, and default configuration settings.
+     *<p>
+     * Note: it is important to close connection instances, once they are not
+     * used any more; doing so will properly close and dispose of any underlying
+     * http connections.     
      */
     public NingConnection connect(Token token)
     {
         return connect(token, null);
     }
 
+    /**
+     * Method for creating {@link NingConnection} to access resources using
+     * specified User token and configuration settings.
+     *<p>
+     * Note: it is important to close connection instances, once they are not
+     * used any more; doing so will properly close and dispose of any underlying
+     * http connections.     
+     */
     public NingConnection connect(Token token, NingClientConfig override)
     {
         return connect(new RequestToken(token.getOauthToken(), token.getOauthTokenSecret()),
@@ -261,6 +273,10 @@ public class NingClient
     /**
      * Method for creating {@link NingConnection} to access resources using
      * specified User token, and default configuration settings.
+     *<p>
+     * Note: it is important to close connection instances, once they are not
+     * used any more; doing so will properly close and dispose of any underlying
+     * http connections.     
      */
     public NingConnection connect(RequestToken userAuth)
     {
@@ -271,6 +287,10 @@ public class NingClient
      * Method for creating {@link NingConnection} to access resources using
      * specified User token, and specified configuration overrides (above
      * and beyond default client configuration settings)
+     *<p>
+     * Note: it is important to close connection instances, once they are not
+     * used any more; doing so will properly close and dispose of any underlying
+     * http connections.     
      */
     public NingConnection connect(RequestToken userAuth, NingClientConfig override)
     {

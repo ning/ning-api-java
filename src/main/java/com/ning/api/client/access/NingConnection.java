@@ -18,7 +18,9 @@ import com.ning.api.client.http.NingHttpPut;
  *<p>
  * Connection instances are immutable so they can be shared between threads; new instances
  * (with alternate configuration) can be constructed using {@link #configuredConnection}
- * method.
+ * method. The only exception to immutability is {@link NingHttpClient} object
+ * connection has; since it has state, connections are not completely stateless,
+ * specifically if and when connection is closed.
  */
 public class NingConnection
 {
@@ -46,6 +48,17 @@ public class NingConnection
      */
     protected final NingClientConfig config;
 
+    /**
+     * The only mutable state; indicates whether connection has been closed or not
+     */
+    protected boolean hasBeenClosed = false;
+    
+    /*
+    ///////////////////////////////////////////////////////////////////////
+    // Life-cycle: creation, disposal
+    ///////////////////////////////////////////////////////////////////////
+     */
+    
     /**
      * Regular constructor used by {@link com.ning.api.client.NingClient} for constructing connection
      * instances.
@@ -88,6 +101,19 @@ public class NingConnection
     public NingConnection configuredConnection(NingClientConfig configOverrides) {
         return new NingConnection(this, configOverrides);
     }
+
+    /**
+     * Method that will close any resources (underlying HTTP connection(s))
+     * this connection object controls. After calling this method,
+     * no
+     */
+    public void close()
+    {
+        if (!hasBeenClosed) {
+            httpClient.close();
+            hasBeenClosed = true;
+        }
+    }
     
     /*
     ///////////////////////////////////////////////////////////////////////
@@ -103,14 +129,39 @@ public class NingConnection
     ///////////////////////////////////////////////////////////////////////
      */
 
-    public Activities activities() { return new Activities(this, config); }
-    public BlogPosts blogPosts() { return new BlogPosts(this, config); }
-    public BroadcastMessages broadcastMessages() { return new BroadcastMessages(this, config); }
-    public Comments comments() { return new Comments(this, config); }
-    public Networks networks() { return new Networks(this, config); }
-    public Photos photos() { return new Photos(this, config); }
-    public Users users() { return new Users(this, config); }
-    public Videos videos() { return new Videos(this, config); }
+    public Activities activities() {
+        checkNotClosed();
+        return new Activities(this, config);
+    }
+
+    public BlogPosts blogPosts() {
+        checkNotClosed();
+        return new BlogPosts(this, config);
+    }
+    public BroadcastMessages broadcastMessages() {
+        checkNotClosed();
+        return new BroadcastMessages(this, config);
+    }
+    public Comments comments() {
+        checkNotClosed();
+        return new Comments(this, config);
+    }
+    public Networks networks() {
+        checkNotClosed();
+        return new Networks(this, config);
+    }
+    public Photos photos() {
+        checkNotClosed();
+        return new Photos(this, config);
+    }
+    public Users users() {
+        checkNotClosed();
+        return new Users(this, config);
+    }
+    public Videos videos() {
+        checkNotClosed();
+        return new Videos(this, config);
+    }
     
     /*
     ///////////////////////////////////////////////////////////////////////
@@ -120,24 +171,28 @@ public class NingConnection
 
     public NingHttpDelete prepareHttpDelete(String endpoint, NingClientConfig config)
     {
+        checkNotClosed();
         String url = prefixFor(endpoint, config);
         return httpClient.prepareDelete(url, signatureCalculator);
     }
     
     public NingHttpGet prepareHttpGet(String endpoint, NingClientConfig config)
     {
+        checkNotClosed();
         String url = prefixFor(endpoint, config);
         return httpClient.prepareGet(url, signatureCalculator);
     }
 
     public NingHttpPost prepareHttpPost(String endpoint, NingClientConfig config)
     {
+        checkNotClosed();
         String url = prefixFor(endpoint, config);
         return httpClient.preparePost(url, signatureCalculator);
     }
 
     public NingHttpPut prepareHttpPut(String endpoint, NingClientConfig config)
     {
+        checkNotClosed();
         String url = prefixFor(endpoint, config);
         return httpClient.preparePut(url, signatureCalculator);
     }
@@ -168,4 +223,17 @@ public class NingConnection
     private String securePrefixFor(String endpoint) {
         return xapiPrefixSecure + endpoint;
     }
+
+    /*
+    ///////////////////////////////////////////////////////////////////////
+    // Internal methods, other
+    ///////////////////////////////////////////////////////////////////////
+     */
+    
+    private void checkNotClosed() {
+        if (hasBeenClosed) {
+            throw new IllegalStateException("Connection instance closed: can not use");
+        }
+    }
+
 }

@@ -18,4 +18,7 @@ public abstract class NingHttpClient
     public abstract NingHttpPost preparePost(String url, OAuthSignatureCalculator sig);
 
     public abstract NingHttpPut preparePut(String url, OAuthSignatureCalculator sig);
+
+    // should we allow throwing of IOException?
+    public abstract void close();
 }

@@ -47,6 +47,8 @@ public abstract class SampleBase
         NingClient client = new NingClient(network, getConsumerKey(), host, httpPort, httpsPort);
         NingConnection conn = client.connect(getUserToken());
         this.doAction(conn);
+        // important: close so that connections get properly disposed of:
+        conn.close();
     }
     
     protected abstract void doAction(NingConnection conn) throws Exception;
