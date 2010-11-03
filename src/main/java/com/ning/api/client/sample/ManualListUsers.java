@@ -29,10 +29,10 @@ public class ManualListUsers extends SampleIntermediate
         try {
             Fields<UserField> fields = conn.users().fields(
                     UserField.birthDate,
-                    UserField.email,
+//                    UserField.email,
                     UserField.fullName,
-                    UserField.statusMessage,
-                    UserField.profileQuestions
+//                    UserField.profileQuestions,
+                    UserField.statusMessage
                     );
             Users.UserLister lister = conn.users().listerForRecent(fields);
             PagedList<User> list = lister.list();
@@ -45,14 +45,12 @@ public class ManualListUsers extends SampleIntermediate
         
         System.out.println("Users found ("+users.size()+"):");
         for (User user : users) {
-            if (user instanceof User) {
-                User uc = (User) user;
-                System.out.println(" User(c): id="+uc.id()+", name="+uc.getFullName()+", birthDate="+uc.getBirthDate()+", email="+uc.getEmail()
-                        +", statusMessage="+uc.getStatusMessage()
-                        +", profileQuestions="+uc.getProfileQuestions());
-            } else {
-                System.out.println(" User(m): id="+user.id()+", created="+user.getCreatedDate()+", author="+user.getAuthor());
-            }
+            User uc = (User) user;
+            System.out.println(" User(c): id="+uc.id()+", name="+uc.getFullName()+", birthDate="+uc.getBirthDate()
+                    +", email="+uc.getEmail()
+                    +", profileQuestions="+uc.getProfileQuestions()
+                    +", statusMessage="+uc.getStatusMessage()
+                    );
         }
         System.out.println("Done!");
     }
