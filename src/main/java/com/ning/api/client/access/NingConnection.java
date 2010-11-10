@@ -142,6 +142,10 @@ public class NingConnection
         checkNotClosed();
         return new BroadcastMessages(this, config);
     }
+    public Categories categories() {
+        checkNotClosed();
+        return new Categories(this, config);
+    }
     public Comments comments() {
         checkNotClosed();
         return new Comments(this, config);

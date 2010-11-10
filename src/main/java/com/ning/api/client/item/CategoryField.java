@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.joda.time.ReadableDateTime;
 
-public enum TopicField implements Typed
+public enum CategoryField implements Typed
 {
     // First id/automatically included standard fields:
     id(Key.class),
@@ -18,27 +18,25 @@ public enum TopicField implements Typed
     visibility(Visibility.class),
 
     // And then the rest
-    isClosed(Boolean.class),
-    isPrivate(Boolean.class, "private"),
+    isPrivate(Boolean.class, "private"),    
     updatedDate(ReadableDateTime.class),
     url(URI.class),
-    commentCount(Integer.class),
     tags(List.class),
     
     // // Sub-resources -- not super elegant, but has to do for now
     author_fullName(String.class, "author.fullName"),
     author_url(String.class, "author.url"),
-    author_iconUrl(String.class, "author.iconUrl")
+    author_iconUrl(String.class, "author.iconUrl")    
     ;
 
     private final Class<?> valueType;
     private final String external;
     
-    private TopicField(Class<?> type) {
+    private CategoryField(Class<?> type) {
         this(type, null);
     }
 
-    private TopicField(Class<?> type, String external)
+    private CategoryField(Class<?> type, String external)
     {
         this.valueType = type;
         this.external = external;

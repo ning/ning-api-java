@@ -6,8 +6,7 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.joda.time.ReadableDateTime;
 
-public class Topic
-    extends ContentItemBase<TopicField, Topic>
+public class Category extends ContentItemBase<CategoryField, Category>
 {
     // Read/write properties:
 
@@ -17,18 +16,18 @@ public class Topic
 
     // Read-only properties:
     @JsonProperty protected ReadableDateTime updatedDate;
+
     /**
      * Link to browser-viewable representation of the item
      */
     @JsonProperty protected URI url;
-    @JsonProperty protected Integer commentCount;
     @JsonProperty protected List<String> tags;
 
     protected Boolean isClosed;
     protected Boolean isPrivate;
     
-    public Topic() { this(null); }
-    public Topic(Key<Topic> id) { this.id = id; }
+    public Category() { this(null); }
+    public Category(Key<Category> id) { this.id = id; }
 
     // Read/write properties:
     
@@ -46,7 +45,6 @@ public class Topic
     public Boolean isClosed() { return isClosed; }
     public Boolean isPrivate() { return isPrivate; }
     public URI getUrl() { return url; }
-    public Integer getCommentCount() { return commentCount; }
     public List<String> getTags() { return tags; }
 
     /*
