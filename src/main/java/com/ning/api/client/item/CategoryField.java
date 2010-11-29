@@ -1,7 +1,6 @@
 package com.ning.api.client.item;
 
 import java.net.URI;
-import java.util.List;
 
 import org.joda.time.ReadableDateTime;
 
@@ -21,7 +20,6 @@ public enum CategoryField implements Typed
     isPrivate(Boolean.class, "private"),    
     updatedDate(ReadableDateTime.class),
     url(URI.class),
-    tags(List.class),
     
     // // Sub-resources -- not super elegant, but has to do for now
     author_fullName(String.class, "author.fullName"),
