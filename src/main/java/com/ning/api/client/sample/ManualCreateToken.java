@@ -15,10 +15,16 @@ public class ManualCreateToken
     protected final static String USER_EMAIL = "user@email";
     protected final static String USER_PASS = "password";
 
+    /**
+     * Network to create tokens for (note: MUST change for this work; should
+     * externalize)
+     */
+    protected final static String NETWORK_FOR_TOKEN = "ningtest";
+    
     public static void main(String[] args) throws Exception
     {
         System.out.println("About to construct client, generate security token:");
-        NingClient client = new NingClient(SampleBase.DEFAULT_NETWORK,
+        NingClient client = new NingClient(NETWORK_FOR_TOKEN,
                 new ConsumerKey(SampleBase.TEST_CONSUMER_KEY, SampleBase.TEST_CONSUMER_SECRET),
                 SampleBase.DEFAULT_XAPI_HOST, SampleBase.DEFAULT_HTTP_PORT, SampleBase.DEFAULT_HTTPS_PORT);
         Token token = client.createToken(USER_EMAIL, USER_PASS);
