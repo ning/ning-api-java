@@ -5,8 +5,12 @@ import com.ning.api.client.item.*;
 
 public class ManualListNetworks extends SampleIntermediate
 {
+    private final static String HOST = DEFAULT_XAPI_HOST;
+    private final static int PORT_HTTP = DEFAULT_HTTP_PORT;
+    private final static int PORT_HTTPS = DEFAULT_HTTPS_PORT;
+    
     public ManualListNetworks() {
-        super();
+        super(HOST, PORT_HTTP, PORT_HTTPS, "www");
     }
     
     public void doAction(NingConnection conn) throws Exception
