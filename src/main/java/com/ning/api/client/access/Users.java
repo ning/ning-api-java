@@ -145,7 +145,11 @@ public class Users extends Items<User, UserField>
         }
 
         public List<User> findByAuthors(String... authors) {
-            throw new UnsupportedOperationException("Not yet implemented");
+		NingHttpGet getter = prepareQuery();
+		for(String author:authors){
+			getter = getter.addQueryParameter("author", author);
+		}
+		return getter.execute(config.getReadTimeoutMsecs()).asItemList(itemType, null);
         }
     }
 
