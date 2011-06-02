@@ -110,7 +110,7 @@ public class DefaultFinder<
     protected NingHttpGet prepareQuery()
     {
         NingHttpGet getter = connection.prepareHttpGet(endpoint, config);
-        // getter = getter.addAccept("* /*");
+        // getter = getter.addAccept("*/*");
         // also, need to specify fields to include with "fields"
         if (fields != null && fields.size() > 0) {
             getter = getter.addQueryParameter("fields", fields.toString());
