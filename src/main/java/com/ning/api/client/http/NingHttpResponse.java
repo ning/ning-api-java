@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
 
 import com.ning.api.client.NingClientException;
@@ -101,7 +100,7 @@ public abstract class NingHttpResponse
         throws NingClientException
     { 
         verifyResponse();
-        ItemResponse<T> response = readAndBind(TypeFactory.parametricType(ItemResponse.class, itemClass));
+        ItemResponse<T> response = readAndBind(objectMapper.getTypeFactory().constructParametricType(ItemResponse.class, itemClass));
         T item = response.getEntry();
         if (item instanceof ContentItem<?,?>) {
             ContentItem<?,?> contentItem = (ContentItem<?,?>) item;
@@ -121,7 +120,7 @@ public abstract class NingHttpResponse
         throws NingClientException
     {
         verifyResponse();
-        ItemSequenceResponse<T> response = readAndBind(TypeFactory.parametricType(ItemSequenceResponse.class, itemClass));
+        ItemSequenceResponse<T> response = readAndBind(objectMapper.getTypeFactory().constructParametricType(ItemSequenceResponse.class, itemClass));
         if (anchor != null) {
             anchor.setAnchor(response.getAnchor());
         }
@@ -136,7 +135,7 @@ public abstract class NingHttpResponse
     public Integer asCount() throws NingClientException
     {
         verifyResponse();
-        ItemCountResponse response = readAndBind(TypeFactory.type(ItemCountResponse.class));
+        ItemCountResponse response = readAndBind(objectMapper.constructType(ItemCountResponse.class));
         return response.getCount();
     }
 

@@ -72,7 +72,7 @@ public class OAuthSignatureCalculator
     //@Override // 1.6
     public void calculateAndAddSignature(String baseURL, Request request, RequestBuilderBase<?> requestBuilder)
     {
-        String httpMethod = request.getReqType().toString(); // POST etc
+        String httpMethod = request.getMethod().toString(); // POST etc
         String authHeaderValue = calculateAuthorizationHeader(httpMethod, baseURL, request.getParams(), request.getQueryParams());
         requestBuilder = requestBuilder.addHeader(HEADER_AUTHORIZATION, authHeaderValue);
     }
