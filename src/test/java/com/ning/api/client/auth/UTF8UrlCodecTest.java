@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 import com.ning.http.util.UTF8UrlEncoder;
 
-public class TestUTF8UrlCodec
+public class UTF8UrlCodecTest
 {
     @Test(groups="fast")
     public void testBasics()

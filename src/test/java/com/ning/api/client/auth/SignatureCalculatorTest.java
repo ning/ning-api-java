@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 import com.ning.http.client.FluentStringsMap;
 
-public class TestSignatureCalculator
+public class SignatureCalculatorTest
 {
     private static final String CONSUMER_KEY = "dpf43f3p2l4k3l03";
 
