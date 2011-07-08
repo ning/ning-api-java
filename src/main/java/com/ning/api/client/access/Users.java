@@ -137,6 +137,13 @@ public class Users extends Items<User, UserField>
 
         // TODO: add "findUserByAuthorName()" variants!
 
+
+        public User findByCurrentAuthor()
+        {
+            NingHttpGet getter = prepareQuery();
+            return getter.execute(config.getReadTimeoutMsecs()).asSingleItem(itemType);
+        }
+
         public User findByAuthor(String author)
         {
             NingHttpGet getter = prepareQuery();
