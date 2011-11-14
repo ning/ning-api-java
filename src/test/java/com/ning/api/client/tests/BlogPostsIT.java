@@ -12,11 +12,11 @@ import com.ning.api.client.item.BlogPost;
 import com.ning.api.client.item.BlogPostField;
 
 @Test(groups = { "BlogPost" })
-public class BlogPostsTest extends BaseTest {
+public class BlogPostsIT extends BaseIT {
 
 	@Parameters( { "xapi-host", "http-port", "https-port", "subdomain",
 			"consumer-key", "consumer-secret", "user-email", "user-password" })
-	public BlogPostsTest(String xapiHost, int defaultHttpPort,
+	public BlogPostsIT(String xapiHost, int defaultHttpPort,
 			int DefaultHttpsPort, String subdomain, String consumerKey,
 			String consumerSecret, String userEmail, String userPassword) {
 		super(xapiHost, defaultHttpPort, DefaultHttpsPort, subdomain,

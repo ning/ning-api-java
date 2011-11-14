@@ -12,11 +12,11 @@ import com.ning.api.client.item.Activity;
 import com.ning.api.client.item.ActivityField;
 
 @Test(groups = { "Activity" })
-public class ActivitiesTest extends BaseTest {
+public class ActivitiesIT extends BaseIT {
 
 	@Parameters( { "xapi-host", "http-port", "https-port", "subdomain",
 			"consumer-key", "consumer-secret", "user-email", "user-password" })
-	public ActivitiesTest(String xapiHost, int defaultHttpPort,
+	public ActivitiesIT(String xapiHost, int defaultHttpPort,
 			int DefaultHttpsPort, String subdomain, String consumerKey,
 			String consumerSecret, String userEmail, String userPassword) {
 		super(xapiHost, defaultHttpPort, DefaultHttpsPort, subdomain,

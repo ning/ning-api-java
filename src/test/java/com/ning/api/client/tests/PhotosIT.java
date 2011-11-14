@@ -10,14 +10,14 @@ import com.ning.api.client.access.Photos;
 import com.ning.api.client.access.Photos.Lister;
 import com.ning.api.client.item.Photo;
 import com.ning.api.client.item.PhotoField;
-import com.ning.api.client.tests.BaseTest;
+import com.ning.api.client.tests.BaseIT;
 
 @Test(groups = { "Photo" })
-public class PhotosTest extends BaseTest {
+public class PhotosIT extends BaseIT {
 
 	@Parameters( { "xapi-host", "http-port", "https-port", "subdomain",
 			"consumer-key", "consumer-secret", "user-email", "user-password" })
-	public PhotosTest(String xapiHost, int defaultHttpPort,
+	public PhotosIT(String xapiHost, int defaultHttpPort,
 			int DefaultHttpsPort, String subdomain, String consumerKey,
 			String consumerSecret, String userEmail, String userPassword) {
 		super(xapiHost, defaultHttpPort, DefaultHttpsPort, subdomain,

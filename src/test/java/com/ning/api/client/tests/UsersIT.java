@@ -11,14 +11,14 @@ import com.ning.api.client.access.Users.UserFinder;
 import com.ning.api.client.access.Users.UserLister;
 import com.ning.api.client.item.User;
 import com.ning.api.client.item.UserField;
-import com.ning.api.client.tests.BaseTest;
+import com.ning.api.client.tests.BaseIT;
 
 @Test(groups = { "User" })
-public class UsersTest extends BaseTest {
+public class UsersIT extends BaseIT {
 
 	@Parameters( { "xapi-host", "http-port", "https-port", "subdomain",
 			"consumer-key", "consumer-secret", "user-email", "user-password" })
-	public UsersTest(String xapiHost, int defaultHttpPort,
+	public UsersIT(String xapiHost, int defaultHttpPort,
 			int DefaultHttpsPort, String subdomain, String consumerKey,
 			String consumerSecret, String userEmail, String userPassword) {
 		super(xapiHost, defaultHttpPort, DefaultHttpsPort, subdomain,

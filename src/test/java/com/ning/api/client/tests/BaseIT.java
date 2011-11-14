@@ -13,7 +13,7 @@ import com.ning.api.client.auth.ConsumerKey;
 import com.ning.api.client.item.Token;
 import com.ning.api.client.item.User;
 
-public class BaseTest {
+public class BaseIT {
 	public String xapiHost;
 
 	public int defaultHttpPort;
@@ -32,7 +32,7 @@ public class BaseTest {
 
 	@Parameters( { "xapi-host", "http-port", "https-port", "subdomain",
 			"consumer-key", "consumer-secret", "user-email", "user-password" })
-	public BaseTest(String xapiHost, int defaultHttpPort, int DefaultHttpsPort,
+	public BaseIT(String xapiHost, int defaultHttpPort, int DefaultHttpsPort,
 			String subdomain, String consumerKey, String consumerSecret,
 			String userEmail, String userPassword) {
 		this.xapiHost = xapiHost;
