@@ -3,8 +3,9 @@ Overview
 
 [ning-api-java][1] is a Java client for accessing the [Ning][2] API.
 
-The [Ning API Documentation][3] contains a complete API reference and
-tutorials.
+The Ning API is a RESTful API that allows developers to access the content on
+their Ning Networks. The [Ning API Documentation][3] contains a complete API
+reference and tutorials.
 
 
 Support
@@ -13,6 +14,11 @@ Support
 If you need help with using this library, you can find us on the [Ning Build
 Network][4]. If you find an issue with this library, please file a bug on our
 [issues page][5].
+
+Example Usage
+=============
+
+See the `/src/test` directory for examples of how to use this library.
 
 
 Integration Tests
@@ -34,7 +40,7 @@ a detailed report of the results in `/target/failsafe-reports/`.
 
 
 [1]: https://github.com/ning/ning-api-java
-[2]: http://ning.com/
+[2]: http://www.ning.com/
 [3]: http://developer.ning.com/
 [4]: http://build.ning.com/
 [5]: https://github.com/ning/ning-api-java/issues
