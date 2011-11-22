@@ -1,25 +1,26 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="Standard Tests" verbose="1">
-	<parameter name="xapi-host"  value="external.ningapis.com"/>
-	<parameter name="http-port"  value="80"/>
-	<parameter name="https-port"  value="443"/>
-	<parameter name="subdomain"  value="SUBDOMIAIN"/>
-	<parameter name="consumer-key"  value="CONSUMER_KEY"/>
-	<parameter name="consumer-secret"  value="CONSUMER_SECRET"/>
-	<parameter name="user-email"  value="test@example.com"/>
-	<parameter name="user-password"  value="MY_PASSWORD"/>
+    <parameter name="xapi-host" value="external.ningapis.com" />
+    <parameter name="http-port" value="80" />
+    <parameter name="https-port" value="443" />
+    <parameter name="subdomain" value="SUBDOMIAIN" />
+    <parameter name="consumer-key" value="CONSUMER_KEY" />
+    <parameter name="consumer-secret" value="CONSUMER_SECRET" />
+    <parameter name="user-email" value="test@example.com" />
+    <parameter name="user-password" value="MY_PASSWORD" />
+    <parameter name="friend-screename" value="MY_FRIEND" />
 
-	<test name="NonAdminTests">
-		<groups>
-			<run>
-				<exclude name="admin" />
-				<exclude name="skip" />
-			</run>
-		</groups>
+    <test name="NonAdminTests">
+        <groups>
+            <run>
+                <exclude name="admin" />
+                <exclude name="skip" />
+            </run>
+        </groups>
 
-		<packages>
-			<package name="com.ning.api.client.tests" />
-		</packages>
-	</test>
+        <packages>
+            <package name="com.ning.api.client.tests" />
+        </packages>
+    </test>
 </suite>

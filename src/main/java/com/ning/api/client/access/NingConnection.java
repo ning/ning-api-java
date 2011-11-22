@@ -29,9 +29,9 @@ public class NingConnection
     protected final NingHttpClient httpClient;
 
     protected final ObjectMapper objectMapper;
-    
+
     protected final OAuthSignatureCalculator signatureCalculator;
-    
+
     /**
      * URL prefix for external API request when using non-secure end point.
      */
@@ -52,13 +52,13 @@ public class NingConnection
      * The only mutable state; indicates whether connection has been closed or not
      */
     protected boolean hasBeenClosed = false;
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Life-cycle: creation, disposal
     ///////////////////////////////////////////////////////////////////////
      */
-    
+
     /**
      * Regular constructor used by {@link com.ning.api.client.NingClient} for constructing connection
      * instances.
@@ -114,7 +114,7 @@ public class NingConnection
             hasBeenClosed = true;
         }
     }
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Public API: configuration
@@ -166,7 +166,11 @@ public class NingConnection
         checkNotClosed();
         return new Videos(this, config);
     }
-    
+    public Friends friends() {
+        checkNotClosed();
+        return new Friends(this, config);
+    }
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Public API for accessors, HTTP method construction
@@ -179,7 +183,7 @@ public class NingConnection
         String url = prefixFor(endpoint, config);
         return httpClient.prepareDelete(url, signatureCalculator);
     }
-    
+
     public NingHttpGet prepareHttpGet(String endpoint, NingClientConfig config)
     {
         checkNotClosed();
@@ -200,7 +204,7 @@ public class NingConnection
         String url = prefixFor(endpoint, config);
         return httpClient.preparePut(url, signatureCalculator);
     }
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Internal methods, factory methods
@@ -233,7 +237,7 @@ public class NingConnection
     // Internal methods, other
     ///////////////////////////////////////////////////////////////////////
      */
-    
+
     private void checkNotClosed() {
         if (hasBeenClosed) {
             throw new IllegalStateException("Connection instance closed: can not use");
