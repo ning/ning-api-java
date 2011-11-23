@@ -26,10 +26,10 @@ public class Photo
      */
     @JsonProperty protected URI url;
     @JsonProperty protected Integer commentCount;
-    @JsonProperty protected List<String> tags;
+    @JsonProperty protected List<String> topTags;
 
     @JsonProperty protected String image;
-    
+
     public Photo() { this(null); }
     public Photo(Key<Photo> id) { this.id = id; }
 
@@ -44,9 +44,9 @@ public class Photo
             throw new Error(e);
         }
     }
-    
+
     // Read/write properties:
-    
+
     public String getDescription() { return description; }
     public void setDescription(String s) { description = s; }
 
@@ -55,23 +55,23 @@ public class Photo
 
     public Visibility getVisibility() { return visibility; }
     public void setVisibility(Visibility v) { visibility = v; }
-    
+
     public Boolean isApproved() { return approved; }
     public void setApproved(Boolean b) { approved = b; }
-    
-    
+
+
     // Read-only properties
 
     public URI getUrl() { return url; }
     public Integer getCommentCount() { return commentCount; }
-    public List<String> getTags() { return tags; }
+    public List<String> getTopTags() { return topTags; }
 
     /*
     ///////////////////////////////////////////////////////////////////////
     // Accessors, sub-resources (other than Author)
     ///////////////////////////////////////////////////////////////////////
      */
-    
+
     /**
      * Method for getting Image object that represents image item that this
      * activity is associated with, if any (only some activity types do).

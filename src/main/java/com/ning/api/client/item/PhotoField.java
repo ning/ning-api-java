@@ -17,13 +17,13 @@ public enum PhotoField implements Typed
     title(String.class),
     description(String.class),
     visibility(Visibility.class),
-    
+
     // And then the rest
     updatedDate(ReadableDateTime.class),
     url(URI.class),
     commentCount(Integer.class),
-    tags(List.class),
-    
+    topTags(List.class),
+
     // // Sub-resources -- not super elegant, but has to do for now
     author_fullName(String.class, "author.fullName"),
     author_url(String.class, "author.url"),
@@ -36,7 +36,7 @@ public enum PhotoField implements Typed
 
     private final Class<?> valueType;
     private final String external;
-    
+
     private PhotoField(Class<?> type) {
         this(type, null);
     }

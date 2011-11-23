@@ -18,7 +18,7 @@ public class BlogPost
     protected PublishStatus publishStatus;
 
     protected Boolean approved;
-    
+
     // and things that app code can not change
 
     @JsonProperty protected ReadableDateTime updatedDate;
@@ -27,12 +27,12 @@ public class BlogPost
      */
     @JsonProperty protected URI url;
     @JsonProperty protected Integer commentCount;
-    @JsonProperty protected List<String> tags;
+    @JsonProperty protected List<String> topTags;
     @JsonProperty("birthdate") protected ReadableDateTime birthDate;
     @JsonProperty protected String email;
 
     // TODO: sub-properties; author.xxx
-    
+
     /**
      * Default constructor is non-public since it is only to be used by
      * serialization framework
@@ -42,7 +42,7 @@ public class BlogPost
     public BlogPost(Key<BlogPost> id) {
         this.id = id;
     }
-    
+
     public BlogPost(String title, String description)
     {
         super();
@@ -61,9 +61,9 @@ public class BlogPost
             throw new Error(e);
         }
     }
-    
+
     // Read/write properties:
-    
+
     public String getTitle() { return title; }
     public void setTitle(String s) { title = s; }
 
@@ -72,23 +72,23 @@ public class BlogPost
 
     public Visibility getVisibility() { return visibility; }
     public void setVisibility(Visibility v) { visibility = v; }
-    
+
     public Boolean isApproved() { return approved; }
     public void setApproved(Boolean b) { approved = b; }
-    
+
     public ReadableDateTime getPublishTime() { return publishTime; }
     public void setPublishTime(ReadableDateTime d) { publishTime = d; }
 
     public PublishStatus getPublishStatus() { return publishStatus; }
     public void setPublishStatus(PublishStatus s) { publishStatus = s; }
-    
+
     // Read-only properties
 
     public ReadableDateTime getUpdatedDate() { return updatedDate; }
     public ReadableDateTime getBirthDate() { return birthDate; }
     public Integer getCommentCount() { return commentCount; }
     public String getEmail() { return email; }
-    public List<String> getTags() { return tags; }
+    public List<String> getTopTags() { return topTags; }
     public URI getUrl() { return url; }
 
 }

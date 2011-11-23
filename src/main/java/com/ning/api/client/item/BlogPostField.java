@@ -24,13 +24,13 @@ public enum BlogPostField implements Typed
     publishStatus(PublishStatus.class),
     title(String.class),
     approved(Boolean.class), // note: can't use with POSTs?
-    
+
     // And then the rest
     updatedDate(ReadableDateTime.class),
     url(URI.class),
     visibility(Visibility.class),
     commentCount(Integer.class),
-    tags(List.class),
+    topTags(List.class),
     birthDate(ReadableDateTime.class),
     email(String.class),
 
@@ -38,12 +38,12 @@ public enum BlogPostField implements Typed
     author_fullName(String.class, "author.fullName"),
     author_url(String.class, "author.url"),
     author_iconUrl(String.class, "author.iconUrl"),
-    
+
     ;
 
     private final Class<?> valueType;
     private final String external;
-    
+
     private BlogPostField(Class<?> type) {
         this(type, null);
     }
