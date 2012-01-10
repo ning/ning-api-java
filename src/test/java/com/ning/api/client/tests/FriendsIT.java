@@ -47,7 +47,7 @@ public class FriendsIT extends BaseIT {
         Friends friends = conn.friends();
 
         Friend friend = new Friend(friendScreenname);
-        friends.deleter(friend).delete();
+        friends.deleter(friend, FriendState.friend).delete();
     }
 
     @Test(groups = { "listers" })
