@@ -62,9 +62,9 @@ public class Friends extends Items<Friend, FriendField> {
         return new FriendCreator(connection, config, endpointForPOST(), friend);
     }
 
-    public final Deleter<Friend> deleter(Friend friend) {
+    public final Deleter<Friend> deleter(Friend friend, FriendState state) {
         return new FriendDeleter(connection, config, endpointForDELETE(),
-                friend);
+                friend, state);
     }
 
     /*
@@ -126,10 +126,13 @@ public class Friends extends Items<Friend, FriendField> {
 
     public static class FriendDeleter extends DefaultDeleter<Friend> {
         protected Friend friend;
+        protected FriendState state;
 
         public FriendDeleter(NingConnection connection,
-                NingClientConfig config, String endpoint, Friend friend) {
+                NingClientConfig config, String endpoint, Friend friend, FriendState state) {
             super(connection, config, endpoint, friend.getFriend());
+            this.friend = friend;
+            this.state = state;
         }
 
         @Override
@@ -138,6 +141,7 @@ public class Friends extends Items<Friend, FriendField> {
                     config);
             deleter = deleter.addAccept("*/*");
             deleter = deleter.addQueryParameter("friend", id.toString());
+            deleter = deleter.addQueryParameter("state", this.state.toString());
             return deleter;
         }
 
