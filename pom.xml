@@ -33,6 +33,7 @@
 	</prerequisites>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<suiteFile>src/test/testng.xml</suiteFile>
 	</properties>
 	<licenses>
 		<license>
@@ -227,7 +228,7 @@
 				</executions>
 				<configuration>
 					<suiteXmlFiles>
-						<suiteXmlFile>src/test/testng.xml</suiteXmlFile>
+						<suiteXmlFile>${suiteFile}</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
 			</plugin>
