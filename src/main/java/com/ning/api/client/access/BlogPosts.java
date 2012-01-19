@@ -38,11 +38,11 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
     public Creator<BlogPost> creator(BlogPost blogPost) {
         return new BlogPostCreator(connection, config, endpointForPOST(), blogPost);
     }
-    
+
     public final Deleter<BlogPost> deleter(Key<BlogPost> id) {
         return new DefaultDeleter<BlogPost>(connection, config, endpointForDELETE(), id);
     }
-    
+
     public Lister listerForRecent(BlogPostField firstField, BlogPostField... otherFields) {
         return listerForRecent(new Fields<BlogPostField>(BlogPostField.class, firstField, otherFields));
     }
@@ -52,15 +52,24 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
                 null, null, null);
     }
 
+    public Lister listerForFeatured(BlogPostField firstField, BlogPostField... otherFields) {
+        return listerForFeatured(new Fields<BlogPostField>(BlogPostField.class, firstField, otherFields));
+    }
+
+    public Lister listerForFeatured(Fields<BlogPostField> fields) {
+        return new Lister(connection, config, endpointForFeatured(), fields,
+                null, null, null);
+    }
+
     public Updater<BlogPost> updater(BlogPost blogPost) {
         return new BlogPostUpdater(connection, config, endpointForPUT(), blogPost);
     }
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Request builder classes (Creator, Updater, Finder, UserLister, ActivityCounter)
     ///////////////////////////////////////////////////////////////////////
-     */    
+     */
 
     /**
      * Intermediate accessor used for building and executing "count" requests.
@@ -79,7 +88,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             this(base.connection, base.config, base.endpoint, base.createdAfter,
                     author, isPrivate, isApproved);
         }
-        
+
         public Counter author(String author) {
             return new Counter(this, author, isPrivate, isApproved);
         }
@@ -91,7 +100,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
         public Counter unapproved() {
             return new Counter(this, author, isPrivate, Boolean.FALSE);
         }
-        
+
         public Counter onlyPrivate() {
             return new Counter(this, author, Boolean.TRUE, isApproved);
         }
@@ -104,7 +113,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
     public static class BlogPostCreator extends DefaultCreator<BlogPost>
     {
         protected BlogPost blogPost;
-        
+
         public BlogPostCreator(NingConnection connection, NingClientConfig config, String endpoint,
                 BlogPost blogPost)
         {
@@ -130,7 +139,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             blogPost.setPublishStatus(PublishStatus.draft);
             blogPost.setPublishTime(null);
             return this;
-        }     
+        }
 
         /**
          * Method for indicating that the BlogPost being created will be published
@@ -141,7 +150,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             blogPost.setPublishStatus(PublishStatus.publish);
             blogPost.setPublishTime(null);
             return this;
-        }     
+        }
 
         /**
          * Method for indicating that the BlogPost being created will be published
@@ -152,8 +161,8 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             blogPost.setPublishStatus(PublishStatus.queued);
             blogPost.setPublishTime(publishTime);
             return this;
-        }     
-        
+        }
+
         @Override
         protected NingHttpPost addCreateParameters(NingHttpPost create)
         {
@@ -175,7 +184,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             return create;
         }
     }
-    
+
     /**
      * Accessor used for fetching sequences of items
      */
@@ -196,12 +205,12 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, Boolean.TRUE);
         }
-        
+
         public Lister unapproved() {
             return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, Boolean.FALSE);
         }
-        
+
         public Lister onlyPrivate() {
             return new Lister(connection, config, endpoint, fields,
                     author, Boolean.TRUE, isApproved);
@@ -217,7 +226,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             return new PagedListImpl<BlogPost,BlogPostField>(connection, config, endpoint,
                     BlogPost.class, fields, author, isPrivate, isApproved);
         }
-    }    
+    }
 
     public static class BlogPostUpdater extends DefaultUpdater<BlogPost>
     {
@@ -248,7 +257,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             blogPost.setPublishStatus(PublishStatus.draft);
             blogPost.setPublishTime(null);
             return this;
-        }     
+        }
 
         /**
          * Method for indicating that the BlogPost being created will be published
@@ -259,7 +268,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             blogPost.setPublishStatus(PublishStatus.publish);
             blogPost.setPublishTime(null);
             return this;
-        }     
+        }
 
         /**
          * Method for indicating that the BlogPost being created will be published
@@ -270,14 +279,14 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
             blogPost.setPublishStatus(PublishStatus.queued);
             blogPost.setPublishTime(publishTime);
             return this;
-        }     
+        }
 
         public BlogPostUpdater approved(Boolean approvedOrNot) {
             this.blogPost = blogPost.clone();
             blogPost.setApproved(approvedOrNot);
             return this;
         }
-        
+
         @Override
         protected NingHttpPut addUpdateParameters(NingHttpPut put)
         {
@@ -286,7 +295,7 @@ public class BlogPosts extends Items<BlogPost, BlogPostField>
                 throw new IllegalArgumentException("Missing mandatory field 'id'");
             }
             put = put.addFormParameter("id", id.toString());
-            
+
             if (blogPost.getDescription() != null) {
                 put = put.addFormParameter("description", blogPost.getDescription());
             }
