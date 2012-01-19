@@ -27,11 +27,11 @@ public class Users extends Items<User, UserField>
     {
         super(connection, config, "User", User.class, UserField.class);
     }
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Public API: constructing request builders
-    // 
+    //
     // note: some custom variants due to extended lookup options
     ///////////////////////////////////////////////////////////////////////
      */
@@ -45,7 +45,7 @@ public class Users extends Items<User, UserField>
     public UserFinder finder(UserField firstField, UserField... otherFields) {
         return finder(new Fields<UserField>(UserField.class, firstField, otherFields));
     }
-    
+
     @Override
     public UserFinder finder(Fields<UserField> fields) {
         return new UserFinder(connection, config, endpointForSingle(), fields);
@@ -69,6 +69,15 @@ public class Users extends Items<User, UserField>
                 null, null, null);
     }
 
+    public UserLister listerForFeatured(UserField firstField, UserField... otherFields) {
+        return listerForFeatured(new Fields<UserField>(UserField.class, firstField, otherFields));
+    }
+
+    public UserLister listerForFeatured(Fields<UserField> fields) {
+        return new UserLister(connection, config, endpointForFeatured(), fields,
+                null, null, null);
+    }
+
     /**
      * Constructs updater for updating user specific by given User object
      */
@@ -83,12 +92,12 @@ public class Users extends Items<User, UserField>
     public Updater<User> updater() {
         return new UserUpdater(connection, config, endpointForPUT(), new User());
     }
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Request builder classes (Creator, Updater, Finder, UserLister, ActivityCounter)
     ///////////////////////////////////////////////////////////////////////
-     */    
+     */
 
     /**
      * Intermediate accessor used for building and executing "count" requests.
@@ -98,9 +107,9 @@ public class Users extends Items<User, UserField>
     public static class Counter extends DefaultCounter
     {
         protected final Boolean isMember;
-        
+
         protected Counter(NingConnection connection, NingClientConfig config, String endpoint,
-                ReadableDateTime createdAfter, 
+                ReadableDateTime createdAfter,
                 Boolean isApproved, Boolean isMember)
         {
             super(connection, config, endpoint, createdAfter, null, null, isApproved);
@@ -115,7 +124,7 @@ public class Users extends Items<User, UserField>
         public Counter onlyMembers() {
             return new Counter(connection, config, endpoint, createdAfter, isApproved, Boolean.TRUE);
         }
-        
+
         @Override
         protected NingHttpGet buildQuery() {
             NingHttpGet query = super.buildQuery();
@@ -125,7 +134,7 @@ public class Users extends Items<User, UserField>
             return query;
         }
     }
-    
+
     /**
      * Intermediate accessor used for building and executing "find" requests
      */
@@ -152,11 +161,11 @@ public class Users extends Items<User, UserField>
         }
 
         public List<User> findByAuthors(String... authors) {
-		NingHttpGet getter = prepareQuery();
-		for(String author:authors){
-			getter = getter.addQueryParameter("author", author);
-		}
-		return getter.execute(config.getReadTimeoutMsecs()).asItemList(itemType, null);
+        NingHttpGet getter = prepareQuery();
+        for(String author:authors){
+            getter = getter.addQueryParameter("author", author);
+        }
+        return getter.execute(config.getReadTimeoutMsecs()).asItemList(itemType, null);
         }
     }
 
@@ -179,7 +188,7 @@ public class Users extends Items<User, UserField>
                     author, isApproved, isMember);
         }
 
-        
+
         // no way to only include approved ones currently, so:
         public UserLister unapproved() {
             return new UserLister(connection, config, endpoint, fields,
@@ -198,7 +207,7 @@ public class Users extends Items<User, UserField>
             return new PagedListImpl<User,UserField>(connection, config, endpoint,
                     User.class, fields, author, null, null, memberParam);
         }
-    }    
+    }
 
     public static class UserUpdater extends DefaultUpdater<User>
     {

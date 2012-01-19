@@ -23,10 +23,11 @@ public enum UserField implements Typed
     // modifiable ones:
     approved(Boolean.class),
     statusMessage(String.class),
-    
+
     // And then the rest
 
     updatedDate(ReadableDateTime.class),
+    featuredDate(ReadableDateTime.class),
     // ugh: API does spell it like this:
     email(String.class),
     url(URI.class), // profile URL
@@ -48,12 +49,12 @@ public enum UserField implements Typed
     author_fullName(String.class, "author.fullName"),
     author_url(String.class, "author.url"),
     author_iconUrl(String.class, "author.iconUrl"),
-    
+
     ;
 
     private final String external;
     private final Class<?> type;
-    
+
     private UserField(Class<?> type) {
         this(type, null);
     }
