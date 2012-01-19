@@ -20,6 +20,7 @@ public enum PhotoField implements Typed
 
     // And then the rest
     updatedDate(ReadableDateTime.class),
+    featuredDate(ReadableDateTime.class),
     url(URI.class),
     commentCount(Integer.class),
     topTags(List.class),

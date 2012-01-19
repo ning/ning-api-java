@@ -38,11 +38,11 @@ public class Photos extends Items<Photo, PhotoField>
     public Creator<Photo> creator(Photo photo) {
         return new PhotoCreator(connection, config, endpointForPOST(), photo);
     }
-    
+
     public final Deleter<Photo> deleter(Key<Photo> id) {
         return new DefaultDeleter<Photo>(connection, config, endpointForDELETE(), id);
     }
-    
+
     public Lister listerForRecent(PhotoField firstField, PhotoField... otherFields) {
         return listerForRecent(new Fields<PhotoField>(PhotoField.class, firstField, otherFields));
     }
@@ -52,15 +52,24 @@ public class Photos extends Items<Photo, PhotoField>
                 null, null, null);
     }
 
+    public Lister listerForFeatured(PhotoField firstField, PhotoField... otherFields) {
+        return listerForRecent(new Fields<PhotoField>(PhotoField.class, firstField, otherFields));
+    }
+
+    public Lister listerForFeatured(Fields<PhotoField> fields) {
+        return new Lister(connection, config, endpointForFeatured(), fields,
+                null, null, null);
+    }
+
     public Updater<Photo> updater(Photo photo) {
         return new PhotoUpdater(connection, config, endpointForPUT(), photo);
     }
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Request builder classes (Creator, Updater, Finder, UserLister, ActivityCounter)
     ///////////////////////////////////////////////////////////////////////
-     */    
+     */
 
     /**
      * Intermediate accessor used for building and executing "count" requests.
@@ -79,7 +88,7 @@ public class Photos extends Items<Photo, PhotoField>
             this(base.connection, base.config, base.endpoint, base.createdAfter,
                     author, isPrivate, isApproved);
         }
-        
+
         public Counter author(String author) {
             return new Counter(this, author, isPrivate, isApproved);
         }
@@ -87,7 +96,7 @@ public class Photos extends Items<Photo, PhotoField>
         public Counter approved() {
             return new Counter(this, author, isPrivate, Boolean.TRUE);
         }
-        
+
         public Counter unapproved() {
             return new Counter(this, author, isPrivate, Boolean.FALSE);
         }
@@ -104,7 +113,7 @@ public class Photos extends Items<Photo, PhotoField>
     public static class PhotoCreator extends DefaultCreator<Photo>
     {
         protected Photo photo;
-        
+
         public PhotoCreator(NingConnection connection, NingClientConfig config, String endpoint,
                 Photo Photo)
         {
@@ -136,7 +145,7 @@ public class Photos extends Items<Photo, PhotoField>
             return create;
         }
     }
-    
+
     /**
      * Accessor used for fetching sequences of items
      */
@@ -162,7 +171,7 @@ public class Photos extends Items<Photo, PhotoField>
             return new Lister(connection, config, endpoint, fields,
                     author, isPrivate, Boolean.FALSE);
         }
-        
+
         public Lister onlyPrivate() {
             return new Lister(connection, config, endpoint, fields,
                     author, Boolean.TRUE, isApproved);
@@ -178,8 +187,8 @@ public class Photos extends Items<Photo, PhotoField>
             return new PagedListImpl<Photo,PhotoField>(connection, config, endpoint,
                     Photo.class, fields, author, isPrivate, isApproved);
         }
-    }    
-    
+    }
+
     public static class PhotoUpdater extends DefaultUpdater<Photo>
     {
         protected Photo photo;
@@ -205,7 +214,7 @@ public class Photos extends Items<Photo, PhotoField>
             photo.setApproved(approvedOrNot);
             return this;
         }
-        
+
         @Override
         protected NingHttpPut addUpdateParameters(NingHttpPut put)
         {
@@ -214,7 +223,7 @@ public class Photos extends Items<Photo, PhotoField>
                 throw new IllegalArgumentException("Missing mandatory field 'id'");
             }
             put = put.addFormParameter("id", id.toString());
-            
+
             if (photo.getDescription() != null) {
                 put = put.addFormParameter("description", photo.getDescription());
             }

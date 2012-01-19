@@ -113,7 +113,6 @@ public class PhotosIT extends BaseIT {
         Lister photoLister = photos.listerForRecent(PhotoField.title);
         photoLister = photoLister.unapproved();
         iteratePhotos(photoLister);
-
     }
 
     @Test(groups = { "listers" })
@@ -141,6 +140,38 @@ public class PhotosIT extends BaseIT {
         iteratePhotos(photoLister);
     }
 
+    @Test(groups = { "listers" })
+    public void listerForFeatured() {
+        Photos photos = conn.photos();
+        Lister photoLister = photos.listerForFeatured(PhotoField.featuredDate);
+        iteratePhotos(photoLister);
+    }
+
+    @Test(groups = { "listers" })
+    public void listerForFeaturedApproved() {
+        Photos photos = conn.photos();
+        Lister photoLister = photos.listerForFeatured(PhotoField.featuredDate);
+        photoLister = photoLister.approved();
+        iteratePhotos(photoLister);
+    }
+
+    @Test(groups = { "listers" })
+    public void listerForFeaturedUnApproved() {
+        Photos photos = conn.photos();
+        Lister photoLister = photos.listerForFeatured(PhotoField.featuredDate);
+        photoLister = photoLister.unapproved();
+        iteratePhotos(photoLister);
+    }
+
+    @Test(groups = { "listers" })
+    public void listerForFeaturedForAuthor() {
+        String userId = getCurrentUserAuthorString();
+        Photos photos = conn.photos();
+        Lister photoLister = photos.listerForFeatured(PhotoField.featuredDate);
+        photoLister = photoLister.author(userId);
+        iteratePhotos(photoLister);
+    }
+
     /**
      * Return the most recent Photo that the current member uploaded
      *
@@ -154,7 +185,6 @@ public class PhotosIT extends BaseIT {
         Iterator<Photo> photoIterator = photoLister.iterator();
         assert photoIterator.hasNext() : "Current member has no photos to test with";
         return photoIterator.next();
-
     }
 
     /**
