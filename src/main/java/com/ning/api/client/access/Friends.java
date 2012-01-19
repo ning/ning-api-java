@@ -118,7 +118,7 @@ public class Friends extends Items<Friend, FriendField> {
             if (friend.getFriend() != null) {
                 create = create.addFormParameter("friend", friend.getFriend())
                         .addFormParameter("state",
-                                FriendState.pending.toString());
+                                FriendState.friend.toString());
             }
             return create;
         }
