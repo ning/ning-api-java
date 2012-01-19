@@ -12,7 +12,7 @@ import com.ning.api.client.item.Typed;
  * conceptual groups of objects (which are essentially accessors,
  * or request builders for modifying individual items or groups
  * of items of specified type).
- * 
+ *
  * @author tatu
  *
  * @param <C> Type of Content item
@@ -41,7 +41,7 @@ public abstract class Items<
     protected final Class<C> itemType;
 
     protected final Class<F> fieldType;
-    
+
     protected Items(NingConnection connection, NingClientConfig config,
             String endpointBase, Class<C> itemType, Class<F> fieldType)
     {
@@ -57,7 +57,7 @@ public abstract class Items<
     // Public API: configuration
     ///////////////////////////////////////////////////////////////////////
      */
-    
+
     public NingClientConfig getConfig() { return config; }
 
     /**
@@ -69,7 +69,7 @@ public abstract class Items<
         // note: we will merge settings, to ensure there are defaults of some kind
         this.config = config.overrideWith(configOverrides);
     }
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Public API: constructing request builders
@@ -100,7 +100,7 @@ public abstract class Items<
     protected String endpointForDELETE() {
         return endpointBase;
     }
-    
+
     protected String endpointForPUT() {
         return endpointBase;
     }
@@ -108,7 +108,7 @@ public abstract class Items<
     protected String endpointForPOST() {
         return endpointBase;
     }
-    
+
     protected String endpointForAlpha() {
         return endpointBase+"/alpha";
     }
@@ -117,10 +117,14 @@ public abstract class Items<
         return endpointBase+"/recent";
     }
 
+    protected String endpointForFeatured() {
+        return endpointBase+"/featured";
+    }
+
     protected String endpointForCount() {
         return endpointBase+"/count";
     }
-    
+
     /*
     ///////////////////////////////////////////////////////////////////////
     // Public API, filter construction
